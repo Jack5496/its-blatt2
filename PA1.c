@@ -30,6 +30,14 @@ char* getStringReplacedCharWithNumbers(char* input){
 	return output;
 }
 
+int word_found(char* line, int word_length, int position){
+	char* word = (char*)malloc((word_length+1)*sizeof(char));
+	memcpy(word, &line[position-word_length],word_length);
+	word[word_length] = '\0';
+	//printf("%s ",word);
+	return 0;
+}
+
 int searchForWordsInLine(char* line){
 	int i;
 	int found_words = 0;
@@ -41,16 +49,16 @@ int searchForWordsInLine(char* line){
 		else{
 			if(word_length>0){
 				found_words = found_words+1;
-				char* word = (char*)malloc((word_length+1)*
-						sizeof(char));
-				memcpy(word, &line[i-word_length],
-						word_length);
-				word[word_length] = '\0';
-				//printf("%s ",word);
+				word_found(line,word_length,i);
 			}			
 			word_length = 0;
 		}
 	}
+	if(word_length>0){
+		found_words = found_words+1;
+		word_found(line,word_length,i);
+	}
+	
 	return found_words;
 	// what if line ends with word?
 }
