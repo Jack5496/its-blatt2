@@ -2,11 +2,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <openssl/sha.h>
 
 char* path_to_dictionary = "rfc793.txt";
 char* path_to_passfile = "passfile";
 
-char* getStringReplacedCharWithNumbers(char* input){
+char* getStringReplacedWithNumbers(char* input){
 	char* output = (char*)malloc(strlen(input) * sizeof(char));
 	strcpy(output,input);
 
@@ -25,9 +26,34 @@ char* getStringReplacedCharWithNumbers(char* input){
 			default: break;
 		}
 	}
-	printf("\n");
+	//printf("Das ist ein Test!\n");
 
 	return output;
+}
+
+int checkIfIsPassword(char* word){
+	size_t length = sizeof(word);
+	unsigned char digest[SHA_DIGEST_LENGTH];
+	SHA1((unsigned char*)&word, length,(unsigned char*)&digest);
+	int i;
+
+	char mdString[SHA_DIGEST_LENGTH*2+1];
+	for(i=0; i< SHA_DIGEST_LENGTH; i++){
+		sprintf(&mdString[i*2], "%02x",(unsigned int)digest[i]);
+	}
+
+	printf("SHA: %s\n",mdString);
+	
+}
+
+int checkVersionsOfWord(char* word){
+	char* alternWord = getStringReplacedWithNumbers(word);
+	
+	checkIfIsPassword(word);
+	checkIfIsPassword(alternWord);	
+	
+	free(alternWord);
+	return 0;
 }
 
 int word_found(char* line, int word_length, int position){
@@ -35,6 +61,11 @@ int word_found(char* line, int word_length, int position){
 	memcpy(word, &line[position-word_length],word_length);
 	word[word_length] = '\0';
 	//printf("%s ",word);
+
+	checkVersionsOfWord(word);
+
+	free(word);
+
 	return 0;
 }
 
@@ -72,6 +103,7 @@ int iterateOverLinesInDictionary(){
 			,path_to_dictionary);
 		return 1;
 	}
+
 	int lineBufferSize = 256;
 
 	char line[lineBufferSize];
@@ -81,10 +113,9 @@ int iterateOverLinesInDictionary(){
 		word_amount = word_amount+searchForWordsInLine(line);
 		line_number = line_number+1;
 	}
-
 	printf("Finished Reading %d words\n",word_amount);
-
 	fclose(dict_file);
+	printf("Ende\n");
 	return 0;
 }
 
@@ -96,7 +127,7 @@ int main(int argc, char **argv){
 		printf("Using standard Paths:\n");
 	}
 	else if(argc==3){
-		path_to_dictionary = (char*)malloc(strlen(argv[1]) * 
+		path_to_dictionary = (char*)malloc((strlen(argv[1])) * 
 					sizeof(char));
 		strcpy(path_to_dictionary,argv[1]);
 
@@ -111,8 +142,10 @@ int main(int argc, char **argv){
 	printf("Path to Dictionary: %s\n",path_to_dictionary);
 	printf("Path to Passfile: %s\n",path_to_passfile);
 
-	char* replaced_text = getStringReplacedCharWithNumbers("Testen");
-	printf("Replace 'Testen' -> %s\n",replaced_text);
-
 	iterateOverLinesInDictionary();
+
+	free(path_to_dictionary);
+	free(path_to_passfile);
+
+	return 0;
 }
