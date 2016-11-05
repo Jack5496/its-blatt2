@@ -1,0 +1,6 @@
+This document describes the DoD Standard Transmission Control Protocol
+(TCP).  There have been nine earlier editions of the ARPA TCP
+specification on which this standard is based, and the present text
+draws heavily from them.  There have been many contributors to this work
+both in terms of concepts and in terms of text.  This edition clarifies
+several details and removes the end-of-letter buffer-si
