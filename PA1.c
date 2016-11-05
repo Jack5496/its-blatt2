@@ -32,6 +32,7 @@ char* getStringReplacedCharWithNumbers(char* input){
 
 int searchForWordsInLine(char* line){
 	int i;
+	int found_words = 0;
 	int word_length = 0;
 	for(i=0; i<strlen(line); i++){
 		if(isalpha(line[i])){
@@ -39,17 +40,18 @@ int searchForWordsInLine(char* line){
 		}
 		else{
 			if(word_length>0){
+				found_words = found_words+1;
 				char* word = (char*)malloc((word_length+1)*
 						sizeof(char));
 				memcpy(word, &line[i-word_length],
 						word_length);
-				word[word_length+1] = '\0';
-				printf("%s ",word);
+				word[word_length] = '\0';
+				//printf("%s ",word);
 			}			
 			word_length = 0;
 		}
 	}
-	printf("\n");
+	return found_words;
 	// what if line ends with word?
 }
 
@@ -68,11 +70,11 @@ int iterateOverLinesInDictionary(){
 	int line_number = 0;
 	int word_amount = 0;
 	while(fgets(line, lineBufferSize, dict_file)){
-		searchForWordsInLine(line);
+		word_amount = word_amount+searchForWordsInLine(line);
 		line_number = line_number+1;
 	}
 
-	printf("Finished Reading\n");
+	printf("Finished Reading %d words\n",word_amount);
 
 	fclose(dict_file);
 	return 0;
