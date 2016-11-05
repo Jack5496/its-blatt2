@@ -30,17 +30,11 @@ char* getStringReplacedCharWithNumbers(char* input){
 	return output;
 }
 
-int checkVersionsOfWord(char* word){
-	char* replaced_text = getStringReplacedCharWithNumbers(word);
-	printf("Replace 'Testen' -> %s\n",replaced_text);	
-}
-
-int wordFound(char* line, int word_length, int position){
+int word_found(char* line, int word_length, int position){
 	char* word = (char*)malloc((word_length+1)*sizeof(char));
 	memcpy(word, &line[position-word_length],word_length);
 	word[word_length] = '\0';
 	//printf("%s ",word);
-	checkVersionsOfWord(word);
 	return 0;
 }
 
@@ -55,14 +49,14 @@ int searchForWordsInLine(char* line){
 		else{
 			if(word_length>0){
 				found_words = found_words+1;
-				wordFound(line,word_length,i);
+				word_found(line,word_length,i);
 			}			
 			word_length = 0;
 		}
 	}
 	if(word_length>0){
 		found_words = found_words+1;
-		wordFound(line,word_length,i);
+		word_found(line,word_length,i);
 	}
 	
 	return found_words;
@@ -117,6 +111,8 @@ int main(int argc, char **argv){
 	printf("Path to Dictionary: %s\n",path_to_dictionary);
 	printf("Path to Passfile: %s\n",path_to_passfile);
 
+	char* replaced_text = getStringReplacedCharWithNumbers("Testen");
+	printf("Replace 'Testen' -> %s\n",replaced_text);
+
 	iterateOverLinesInDictionary();
 }
-
