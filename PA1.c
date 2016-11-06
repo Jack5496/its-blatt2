@@ -100,7 +100,7 @@ int checkIfIsPassword(char* word){
 
 int checkVersionsOfWord(char* word){
 	char* alternWord = (char*)malloc(strlen(word) * sizeof(char));
-	strcpy(alternWord,input);
+	strcpy(alternWord,word);
 	getStringReplacedWithNumbers(alternWord);
 	
 	checkIfIsPassword(word);
