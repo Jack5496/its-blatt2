@@ -121,7 +121,6 @@ int checkVersionsOfWord(char* word){
 int word_found(char* line, int word_length, int position){
 	char* word = (char*)malloc((word_length)*sizeof(char));
 	memcpy(word, &line[position-word_length],word_length);
-	word[word_length] = '\0';
 		
 	checkVersionsOfWord(word);
 	
@@ -136,18 +135,18 @@ int searchForWordsInLine(char* line){
 	int word_length = 0;
 	for(i=0; i<strlen(line); i++){
 		if(isalpha(line[i])){
-			word_length=word_length+1;
+			word_length++;
 		}
 		else{
 			if(word_length>0){
-				found_words = found_words+1;
+				found_words++;
 				word_found(line,word_length,i);
 			}			
 			word_length = 0;
 		}
 	}
 	if(word_length>0){
-		found_words = found_words+1;
+		found_words++;
 		word_found(line,word_length,i);
 	}
 	
