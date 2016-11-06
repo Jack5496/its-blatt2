@@ -33,7 +33,6 @@ int getStringReplacedWithNumbers(char* input){
 }
 
 int savePassBase(){
-	
 	pass_file = fopen(path_to_passfile,"r");
 
 	if(!pass_file){
@@ -46,7 +45,7 @@ int savePassBase(){
 	char line[lineBufferSize];
 	
 	while(fgets(line, lineBufferSize, pass_file)){
-	
+		printf("Length Line: %d\0",strlen(line));
 		int offset;
 		int startpos = -1;
 		for(offset=0; offset<strlen(line); offset++){
@@ -167,9 +166,6 @@ int freeAllAlocated(){
 int main(int argc, char **argv){
 	printf("\n");
 	
-	if(argc==1){
-		printf("Using standard Paths:\n");
-	}
 	else if(argc==3){
 		path_to_dictionary = argv[1];
 		path_to_passfile = argv[2];
