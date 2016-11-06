@@ -7,6 +7,9 @@
 
 char* path_to_dictionary;
 char* path_to_passfile;
+FILE *pass_file;
+char passBase[];
+char* pass_file_line;
 
 int getStringReplacedWithNumbers(char* input){
 
@@ -29,38 +32,8 @@ int getStringReplacedWithNumbers(char* input){
 	return 0;
 }
 
-int printFoundPassword(char* word, char* line){
-	printf("%s: %s",word,line);
-}
-
-int passwordMatchesInLine(char word[], char base[], char* line){
-	int offset;
-	int startpos = -1;
-	for(offset=0; offset<strlen(line); offset++){
-		if(line[offset]=='}'){
-			startpos=offset+1;
-			break;
-		}
-	}
-
-	if(startpos!=-1){
-		int length = strlen(line)-startpos;
-		char* realBase = (char*)malloc((length)*sizeof(char));
-		memcpy(realBase, &line[startpos],length);
-
-		printf("CMP: %s l:%d == %s l:%d\n",realBase,strlen(realBase),base,strlen(base));
-
-		int comp = strcmp(realBase,base);
-
-		if(comp==0){		
-			printFoundPassword(word,line);
-		}
-	}
-	return 0;
-}
-
-int checkIfBase64SHA1Matches(char* word, char* base){
-	FILE *pass_file;
+int savePassBase(){
+	
 	pass_file = fopen(path_to_passfile,"r");
 
 	if(!pass_file){
@@ -73,10 +46,34 @@ int checkIfBase64SHA1Matches(char* word, char* base){
 	char line[lineBufferSize];
 	
 	while(fgets(line, lineBufferSize, pass_file)){
-		passwordMatchesInLine(word,base, line);
-	}
-
 	
+		int offset;
+		int startpos = -1;
+		for(offset=0; offset<strlen(line); offset++){
+			if(line[offset]=='}'){
+				startpos=offset+1;
+				break;
+			}
+		}
+
+		if(startpos!=-1){
+			int length = strlen(line)-startpos;
+			passBase = (char*)malloc((length)*sizeof(char));
+			memcpy(passBase, &line[startpos],length);
+			
+			pass_file_line = malloc(strlen(line)*sizeof(char));
+			strcpy(pass_file_line, line);
+		}
+	}
+	return 0;
+}
+
+int checkIfBase64SHA1Matches(char word[], char base[]){
+		int comp = strcmp(passBase,base);
+	
+		if(comp==0){
+			printf("%s: %s",word,pass_file_line);	
+		}
 }
 
 int checkIfIsPassword(char word[]){	
@@ -177,10 +174,11 @@ int main(int argc, char **argv){
 		path_to_dictionary = argv[1];
 		path_to_passfile = argv[2];
 	
-	printf("Path to Dictionary: %s\n",path_to_dictionary);
-	printf("Path to Passfile: %s\n",path_to_passfile);
+		savePassBase();
 
-	iterateOverLinesInDictionary();
+		iterateOverLinesInDictionary();
+		
+		freeAllAlocated()
 
 	}
 		
