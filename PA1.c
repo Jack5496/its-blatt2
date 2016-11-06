@@ -61,7 +61,7 @@ int savePassBase(){
 			memcpy(passBase, &line[startpos],length);
 			
 			pass_file_line = malloc(strlen(line)*sizeof(char));
-			strcpy(pass_file_line, line);
+			memcpy(pass_file_line, &line[0],strlen(line));
 		}
 	}
 	return 0;
@@ -109,9 +109,8 @@ int word_found(char* line, int word_length, int position){
 	return 0;
 }
 
-int searchForWordsInLine(char* line){
+int searchForWordsInLine(char line[]){
 	int i;
-	int found_words = 0;
 	int word_length = 0;
 	for(i=0; i<strlen(line); i++){
 		if(isalpha(line[i])){
@@ -119,18 +118,16 @@ int searchForWordsInLine(char* line){
 		}
 		else{
 			if(word_length>0){
-				found_words = found_words+1;
 				word_found(line,word_length,i);
 			}			
 			word_length = 0;
 		}
 	}
 	if(word_length>0){
-		found_words = found_words+1;
 		word_found(line,word_length,i);
 	}
 	
-	return found_words;
+	return 0;
 }
 
 int iterateOverLinesInDictionary(){
@@ -146,15 +143,11 @@ int iterateOverLinesInDictionary(){
 	int lineBufferSize = 256;
 	char line[lineBufferSize];
 	
-	int line_number = 0;
-	int word_amount = 0;
 	while(fgets(line, lineBufferSize, dict_file)){
-		word_amount = word_amount+searchForWordsInLine(line);
-		line_number = line_number+1;
+		searchForWordsInLine(line);
 	}
-	printf("Finished Reading %d words\n",word_amount);
 	fclose(dict_file);
-	printf("Ende\n");
+	
 	return 0;
 }
 
