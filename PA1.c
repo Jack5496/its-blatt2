@@ -96,6 +96,8 @@ int checkIfIsPassword(char* word){
 	b64sha1(hash,base);
 
 	checkPasswordMatches(word,base);
+	
+	free(base);
 
 	return 0;
 }
