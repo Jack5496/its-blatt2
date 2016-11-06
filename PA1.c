@@ -5,6 +5,12 @@
 #include <openssl/sha.h>
 #include "util.h"
 
+char* path_to_dictionary;
+char* path_to_passfile;
+FILE *pass_file;
+char* passBase;
+char* pass_file_line;
+
 int getStringReplacedWithNumbers(char input[]){
 
 	int i;
@@ -167,11 +173,7 @@ int main(int argc, char **argv){
 	
 	if(argc==3){
 		
-		char* path_to_dictionary;
-		char* path_to_passfile;
-		FILE *pass_file;
-		char* passBase;
-		char* pass_file_line;
+		
 		
 		path_to_dictionary = argv[1];
 		path_to_passfile = argv[2];
