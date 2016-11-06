@@ -83,10 +83,18 @@ int readBasedHashFromPassfile(){
 }
 
 int checkIfIsPassword(char* word){
-	int size = strlen(word);
+	int old_size = strlen(word);
+	char fixed[old_size+1];
+
+	int pos;
+	for(pos=0;pos<old_size; pos++){
+		fixed[pos]=word[pos];
+	}	
+	fixed[old_size] = '\0';
+	size_t length = strlen(fixed);
 
 	unsigned char hash[SHA_DIGEST_LENGTH];
-	SHA1(word,size,hash);	
+	SHA1(fixed,length,hash);	
 	char* base = (char*)malloc(29*sizeof(char));
 	b64sha1(hash,base);
 
@@ -113,6 +121,7 @@ int checkVersionsOfWord(char* word){
 int word_found(char* line, int word_length, int position){
 	char* word = (char*)malloc((word_length)*sizeof(char));
 	memcpy(word, &line[position-word_length],word_length);
+	word[word_length] = '\0';
 		
 	checkVersionsOfWord(word);
 	
@@ -127,18 +136,18 @@ int searchForWordsInLine(char* line){
 	int word_length = 0;
 	for(i=0; i<strlen(line); i++){
 		if(isalpha(line[i])){
-			word_length++;
+			word_length=word_length+1;
 		}
 		else{
 			if(word_length>0){
-				found_words++;
+				found_words = found_words+1;
 				word_found(line,word_length,i);
 			}			
 			word_length = 0;
 		}
 	}
 	if(word_length>0){
-		found_words++;
+		found_words = found_words+1;
 		word_found(line,word_length,i);
 	}
 	
