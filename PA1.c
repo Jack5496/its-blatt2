@@ -45,7 +45,6 @@ int savePassBase(){
 	char line[lineBufferSize];
 	
 	while(fgets(line, lineBufferSize, pass_file)){
-		printf("Length Line: %d\0",strlen(line));
 		int offset;
 		int startpos = -1;
 		for(offset=0; offset<strlen(line); offset++){
@@ -57,6 +56,7 @@ int savePassBase(){
 
 		if(startpos!=-1){
 			int length = strlen(line)-startpos;
+			printf("PassBaseLength: %d\n",length);
 			passBase = malloc(length*sizeof(char));
 			memcpy(passBase, &line[startpos],length);
 			
