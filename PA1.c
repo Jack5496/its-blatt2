@@ -81,7 +81,7 @@ int checkIfIsPassword(char word[]){
 	unsigned char hash[SHA_DIGEST_LENGTH];
 	
 	//word[strlen(word)-1]='\0';
-	
+	printf("Word: %s\n",word);
 	//printf("Wordlength: %d\n",strlen(word));
 	SHA1(word,strlen(word)+1,hash);
 	
@@ -119,7 +119,7 @@ int word_found(char line[], int word_length, int position){
 		word[i]=line[i+position];
 	}
 	word[word_length]='\0';
-	printf("Word: %s\n",word);	
+	//printf("Word: %s\n",word);	
 	
 	checkVersionsOfWord(word,word_length);
 	
