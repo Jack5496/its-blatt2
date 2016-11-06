@@ -152,8 +152,7 @@ int iterateOverLinesInDictionary(){
 }
 
 int freeAllAlocated(){
-	free(path_to_dictionary);
-	free(path_to_passfile);
+
 }
 
 int main(int argc, char **argv){
