@@ -33,7 +33,7 @@ int printFoundPassword(char* word, char* line){
 	printf("%s: %s",word,line);
 }
 
-int passwordMatchesInLine(char* word, char* base, char* line){
+int passwordMatchesInLine(char word[], char base[], char* line){
 	int offset;
 	int startpos = -1;
 	for(offset=0; offset<strlen(line); offset++){
@@ -79,22 +79,12 @@ int checkIfBase64SHA1Matches(char* word, char* base){
 	
 }
 
-int checkIfIsPassword(char* word){
-	int old_size = strlen(word);
-	char fixed[old_size+1];
-
-	int pos;
-	for(pos=0;pos<old_size; pos++){
-		fixed[pos]=word[pos];
-	}	
-	fixed[old_size] = '\0';
-	size_t length = strlen(fixed);
-	
+int checkIfIsPassword(char word[]){	
 	unsigned char hash[SHA_DIGEST_LENGTH];
 	
-	SHA1(fixed,length,hash);
+	SHA1(word,strlen(word),hash);
 	
-	unsigned char* base = malloc(29*sizeof(char));
+	unsigned char base[29];
 	b64sha1(hash,base);
 
 	checkIfBase64SHA1Matches(word,base);
