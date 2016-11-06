@@ -120,6 +120,7 @@ int searchForWordsInLine(char line[]){
 	int word_length = 0;
 	for(i=0; i<strlen(line); i++){
 		if(isalpha(line[i])){
+			printf("SFW Length: %d\n",word_length);
 			word_length=word_length+1;
 		}
 		else{
