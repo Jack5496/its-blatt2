@@ -106,8 +106,6 @@ int checkVersionsOfWord(char* word){
 	checkIfIsPassword(word);
 	checkIfIsPassword(alternWord);	
 	
-	free(alternWord);
-	
 	return 0;
 }
 
