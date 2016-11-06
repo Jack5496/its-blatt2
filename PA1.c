@@ -171,22 +171,24 @@ int iterateOverLinesInDictionary(){
 	return 0;
 }
 
+int freeAllAllocated(){
+	free(realBase);
+	free(pass_file_line);	
+}
 
 int main(int argc, char **argv){
 	printf("\n");
 
 	if(argc==3){
-		path_to_dictionary = (char*)malloc((strlen(argv[1])) * 
-					sizeof(char));
-		strcpy(path_to_dictionary,argv[1]);
-
-		path_to_passfile = (char*)malloc(strlen(argv[2]) * 
-					sizeof(char));
+		path_to_dictionary = argv[1];
+		path_to_passfile = argv[2];
 		strcpy(path_to_passfile,argv[2]);
 		
 		readBasedHashFromPassfile();
 
 		iterateOverLinesInDictionary();
+		
+		freeAllAllocated();
 	}
 	
 
