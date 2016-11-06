@@ -56,7 +56,7 @@ int savePassBase(){
 
 		if(startpos!=-1){
 			int length = 28;
-			//printf("PassBaseLength: %d\n",length);
+			printf("PassBaseLength: %d\n",length);
 			passBase = malloc(length*sizeof(char));
 			memcpy(passBase, &line[startpos],length);
 			
@@ -112,7 +112,6 @@ int checkVersionsOfWord(char* word, int word_length){
 }
 
 int word_found(char line[], int word_length, int position){
-	//char* wort=malloc(sizeof(char)*word_length);
 	char word[word_length+1];
 	
 	int i;
@@ -120,7 +119,7 @@ int word_found(char line[], int word_length, int position){
 		word[i]=line[i+position];
 	}
 	word[word_length]='\0';
-	//printf("Word: %s\n",word);	
+	printf("Word: %s\n",word);	
 	
 	checkVersionsOfWord(word,word_length);
 	
