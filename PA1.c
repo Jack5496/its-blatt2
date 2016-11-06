@@ -55,8 +55,8 @@ int savePassBase(){
 		}
 
 		if(startpos!=-1){
-			int length = 28;
-			passBase = malloc((length+1)*sizeof(char));
+			int length = 29;
+			passBase = malloc((length)*sizeof(char));
 			memcpy(passBase, &line[startpos],length);
 			passBase[length]='\0';
 			pass_file_line = malloc((strlen(line)-1)*sizeof(char));
