@@ -76,6 +76,9 @@ int readBasedHashFromPassfile(){
 			
 		}	
 	}
+	
+	flcose(pass_file);
+	
 	return 0;
 }
 
