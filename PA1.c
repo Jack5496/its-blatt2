@@ -55,7 +55,7 @@ int savePassBase(){
 		}
 
 		if(startpos!=-1){
-			int length = strlen(line)-startpos;
+			int length = strlen(line)-startpos-1;
 			printf("PassBaseLength: %d\n",length);
 			passBase = malloc(length*sizeof(char));
 			memcpy(passBase, &line[startpos],length);
