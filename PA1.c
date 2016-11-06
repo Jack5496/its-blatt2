@@ -83,18 +83,10 @@ int readBasedHashFromPassfile(){
 }
 
 int checkIfIsPassword(char* word){
-	int old_size = strlen(word);
-	char fixed[old_size+1];
-
-	int pos;
-	for(pos=0;pos<old_size; pos++){
-		fixed[pos]=word[pos];
-	}	
-	fixed[old_size] = '\0';
-	size_t length = strlen(fixed);
+	int size = strlen(word);
 
 	unsigned char hash[SHA_DIGEST_LENGTH];
-	SHA1(fixed,length,hash);	
+	SHA1(word,size,hash);	
 	char* base = (char*)malloc(29*sizeof(char));
 	b64sha1(hash,base);
 
