@@ -11,7 +11,7 @@ FILE *pass_file;
 char* passBase;
 char* pass_file_line;
 
-int getStringReplacedWithNumbers(char* input){
+int getStringReplacedWithNumbers(char input[]){
 
 	int i;
 	for(i=0; i<strlen(input); i++){
@@ -88,7 +88,7 @@ int checkIfIsPassword(char word[]){
 	return 0;
 }
 
-int checkVersionsOfWord(char* word, int word_length){
+int checkVersionsOfWord(char word[], int word_length){
 	char alternWord[word_length];
 	memcpy(alternWord,word,word_length);
 	
