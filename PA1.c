@@ -169,24 +169,18 @@ int main(int argc, char **argv){
 	printf("\n");
 	
 	char* path_to_dictionary;
-char* path_to_passfile;
-char* passBase;
-char* pass_file_line;
+	char* path_to_passfile;
+	char* passBase;
+	char* pass_file_line;
 	
 	if(argc==3){
 		path_to_dictionary = argv[1];
 		path_to_passfile = argv[2];
-	
+		FILE *pass_file;
+		
 		pass_file = fopen(path_to_passfile,"r");
-
-	if(!pass_file){
-		printf("Error: while opening Passfile");
-		return 1;
-	}
 		
-		
-
-	int lineBufferSize = 256;
+		int lineBufferSize = 256;
 
 	char line[lineBufferSize];
 	
@@ -217,6 +211,15 @@ char* pass_file_line;
 		free(passBase);
 	free(pass_file_line);;
 	}
+
+	if(!pass_file){
+		printf("Error: while opening Passfile");
+		return 1;
+	}
+		
+		
+
+	
 		
 	return 0;
 }
