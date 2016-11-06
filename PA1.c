@@ -69,7 +69,7 @@ int savePassBase(){
 
 int checkIfBase64SHA1Matches(char word[], char base[]){
 		int comp = strcmp(passBase,base);
-		printf("Word: %s Base: %s | PassBase: %s\n",word,base,passBase);
+		//printf("Word: %s Base: %s | PassBase: %s\n",word,base,passBase);
 	
 		if(comp==0){
 			printf("%s: %s\n",word,pass_file_line);	
@@ -77,12 +77,12 @@ int checkIfBase64SHA1Matches(char word[], char base[]){
 }
 
 int checkIfIsPassword(char word[]){	
-	printf("Check if is Pass\n");
+	//printf("Check if is Pass\n");
 	unsigned char hash[SHA_DIGEST_LENGTH];
 	
 	//word[strlen(word)-1]='\0';
 	
-	printf("Wordlength: %d\n",strlen(word));
+	//printf("Wordlength: %d\n",strlen(word));
 	SHA1(word,strlen(word)+1,hash);
 	
 	unsigned char base[29];
@@ -120,7 +120,7 @@ int word_found(char line[], int word_length, int position){
 		word[i]=line[i+position];
 	}
 	word[word_length]='\0';
-	printf("Word: %s\n",word);	
+	//printf("Word: %s\n",word);	
 	
 	checkVersionsOfWord(word,word_length);
 	
