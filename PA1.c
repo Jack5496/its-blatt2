@@ -32,7 +32,7 @@ int getStringReplacedWithNumbers(char* input){
 }
 
 int printFoundPassword(char* word, char* line){
-	printf("%s: %s",word,line);
+	printf("%s: %sßn",word,line);
 }
 
 int passwordMatchesInLine(char* word, char* base, char* line){
@@ -56,7 +56,7 @@ int passwordMatchesInLine(char* word, char* base, char* line){
 		int comp = strcmp(realBase,base);
 
 		if(comp==0){		
-			printFoundPassword(word,line);
+			printFoundPassword(word,pass_file_line);
 		}
 	}
 	return 0;
