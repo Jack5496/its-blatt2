@@ -91,7 +91,6 @@ int checkIfIsPassword(char word[]){
 }
 
 int checkVersionsOfWord(char word[]){
-	printf("WordLength param: %d\n",word_length);
 	char* alternWord=malloc(sizeof(char)*strlen(word));
 	memcpy(alternWord,word,strlen(word));
 	printf("AlternLength: %d\n",strlen(alternWord));
