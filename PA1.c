@@ -8,27 +8,25 @@
 char* path_to_dictionary;
 char* path_to_passfile;
 
-char* getStringReplacedWithNumbers(char* input){
-	char* output = (char*)malloc(strlen(input) * sizeof(char));
-	strcpy(output,input);
+int getStringReplacedWithNumbers(char* input){
 
 	int i;
-	for(i=0; i<strlen(output); i++){
-		switch(output[i]){
-			case 'o': case 'O': output[i] = '0'; break;
-			case 'i': case 'I': output[i] = '1'; break;
-			case 'r': case 'R': output[i] = '2'; break;
-			case 'e': case 'E': output[i] = '3'; break;
-			case 'a': case 'A': output[i] = '4'; break;
-			case 's': case 'S': output[i] = '5'; break;
-			case 't': case 'T': output[i] = '7'; break;
-			case 'b': case 'B': output[i] = '8'; break;
-			case 'g': case 'G': output[i] = '9'; break;
+	for(i=0; i<strlen(input); i++){
+		switch(input[i]){
+			case 'o': case 'O': input[i] = '0'; break;
+			case 'i': case 'I': input[i] = '1'; break;
+			case 'r': case 'R': input[i] = '2'; break;
+			case 'e': case 'E': input[i] = '3'; break;
+			case 'a': case 'A': input[i] = '4'; break;
+			case 's': case 'S': input[i] = '5'; break;
+			case 't': case 'T': input[i] = '7'; break;
+			case 'b': case 'B': input[i] = '8'; break;
+			case 'g': case 'G': input[i] = '9'; break;
 			default: break;
 		}
 	}
 	
-	return output;
+	return 0;
 }
 
 int printFoundPassword(char* word, char* line){
@@ -101,7 +99,9 @@ int checkIfIsPassword(char* word){
 }
 
 int checkVersionsOfWord(char* word){
-	char* alternWord = getStringReplacedWithNumbers(word);
+	char* alternWord = (char*)malloc(strlen(word) * sizeof(char));
+	strcpy(alternWord,input);
+	getStringReplacedWithNumbers(alternWord);
 	
 	checkIfIsPassword(word);
 	checkIfIsPassword(alternWord);	
