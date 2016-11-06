@@ -27,7 +27,6 @@ int getStringReplacedWithNumbers(char input[]){
 }
 
 int savePassBase(){
-	FILE *pass_file;
 	pass_file = fopen(path_to_passfile,"r");
 
 	if(!pass_file){
@@ -170,6 +169,7 @@ int main(int argc, char **argv){
 		
 		char* path_to_dictionary;
 		char* path_to_passfile;
+		FILE *pass_file;
 		char* passBase;
 		char* pass_file_line;
 		
