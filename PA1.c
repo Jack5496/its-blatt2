@@ -79,6 +79,7 @@ int checkIfBase64SHA1Matches(char* word, char* base){
 
 int checkIfIsPassword(char* word){
 	int old_size = strlen(word);
+	/**
 	char fixed[old_size+1];
 
 	int pos;
@@ -87,9 +88,11 @@ int checkIfIsPassword(char* word){
 	}	
 	fixed[old_size] = '\0';
 	size_t length = strlen(fixed);
-
+	**/
 	unsigned char hash[SHA_DIGEST_LENGTH];
-	SHA1(fixed,length,hash);	
+	
+	//SHA1(fixed,length,hash);
+	SHA1(word,length,hash);
 	char* base = (char*)malloc(29*sizeof(char));
 	b64sha1(hash,base);
 
