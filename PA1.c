@@ -107,7 +107,7 @@ int checkVersionsOfWord(char* word){
 int word_found(char line[], int word_length, int position){
 	printf("Word Found Length: %d\n",word_length);
 	char* word=malloc(sizeof(char)*word_length);
-	memcpy(word, &line[position],word_length);
+	strcpy(word, line[position],word_length);
 	printf("Start: %d copy %d Chars\n",position,word_length);
 	printf("Word Found Length: %d\n",strlen(word));
 	checkVersionsOfWord(word);
