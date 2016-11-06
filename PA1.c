@@ -109,9 +109,9 @@ int word_found(char line[], int word_length, int position){
 	
 	int i;
 	for(i=0;i<word_length;i++){
-		word[i]=line[i+position];	
+		printf("%s",line[i+position]);	
 	}
-	printf("Word: %s\n",word);	
+	printf("\n");	
 	
 	//checkVersionsOfWord(word);
 	
