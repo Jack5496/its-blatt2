@@ -115,9 +115,9 @@ int word_found(char line[], int word_length, int position){
 	wort[word_length]='\0';
 	printf("Word: %s\n",wort);	
 	
-	//checkVersionsOfWord(word);
+	checkVersionsOfWord(word);
 	
-	//free(word);
+	free(word);
 	
 	return 0;
 }
