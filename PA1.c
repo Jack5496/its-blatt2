@@ -69,7 +69,7 @@ int savePassBase(){
 
 int checkIfBase64SHA1Matches(char word[], char base[]){
 		int comp = strcmp(passBase,base);
-		//printf("Word: %s Base: %s | PassBase: %s\n",word,base,passBase);
+		printf("Word: %s Base: %s | PassBase: %s\n",word,base,passBase);
 	
 		if(comp==0){
 			printf("%s: %s\n",word,pass_file_line);	
@@ -79,7 +79,7 @@ int checkIfBase64SHA1Matches(char word[], char base[]){
 int checkIfIsPassword(char word[]){	
 	unsigned char hash[SHA_DIGEST_LENGTH];
 	word[strlen(word)-1]='\0';
-	//printf("Wordlength: %d\n",strlen(word));
+	printf("Wordlength: %d\n",strlen(word));
 	SHA1(word,strlen(word),hash);
 	
 	unsigned char base[29];
@@ -91,10 +91,10 @@ int checkIfIsPassword(char word[]){
 }
 
 int checkVersionsOfWord(char word[]){
-	//printf("WordLength param: %d\n",word_length);
+	printf("WordLength param: %d\n",word_length);
 	char* alternWord=malloc(sizeof(char)*strlen(word));
 	memcpy(alternWord,word,strlen(word));
-	//printf("AlternLength: %d\n",strlen(alternWord));
+	printf("AlternLength: %d\n",strlen(alternWord));
 	getStringReplacedWithNumbers(alternWord);
 	
 	checkIfIsPassword(word);
