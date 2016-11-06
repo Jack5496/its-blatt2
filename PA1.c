@@ -172,9 +172,6 @@ int main(int argc, char **argv){
 	printf("\n");
 	
 	if(argc==3){
-		
-		
-		
 		path_to_dictionary = argv[1];
 		path_to_passfile = argv[2];
 	
@@ -183,7 +180,6 @@ int main(int argc, char **argv){
 		iterateOverLinesInDictionary();
 		
 		freeAllAlocated();
-
 	}
 		
 	return 0;
