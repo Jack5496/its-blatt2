@@ -7,6 +7,7 @@
 
 char* path_to_dictionary;
 char* path_to_passfile;
+char* realBase;
 
 int getStringReplacedWithNumbers(char* input){
 
@@ -45,7 +46,7 @@ int passwordMatchesInLine(char* word, char* base, char* line){
 
 	if(startpos!=-1){
 		int length = strlen(line)-startpos-1;
-		char* realBase = (char*)malloc((length)*sizeof(char));
+		realBase = (char*)malloc((length)*sizeof(char));
 		memcpy(realBase, &line[startpos],length);
 
 		int comp = strcmp(realBase,base);
@@ -57,7 +58,7 @@ int passwordMatchesInLine(char* word, char* base, char* line){
 	return 0;
 }
 
-int checkIfBase64SHA1Matches(char* word, char* base){
+int readPassBase(){
 	FILE *pass_file;
 	pass_file = fopen(path_to_passfile,"r");
 
@@ -71,10 +72,30 @@ int checkIfBase64SHA1Matches(char* word, char* base){
 	char line[lineBufferSize];
 	
 	while(fgets(line, lineBufferSize, pass_file)){
-		passwordMatchesInLine(word,base, line);
-	}
+		int offset;
+		int startpos = -1;
+		for(offset=0; offset<strlen(line); offset++){
+			if(line[offset]=='}'){
+				startpos=offset+1;
+				break;
+			}
+		}
 
-	
+		if(startpos!=-1){
+			int length = strlen(line)-startpos-1;
+			realBase = (char*)malloc((length)*sizeof(char));
+			memcpy(realBase, &line[startpos],length);
+		}
+	}
+	return 0;
+}
+
+int checkIfBase64SHA1Matches(char* word, char* base){
+	int comp = strcmp(realBase,base);
+
+	if(comp==0){		
+		printFoundPassword(word,line);
+	}
 }
 
 int checkIfIsPassword(char* word){
@@ -173,6 +194,7 @@ int iterateOverLinesInDictionary(){
 int freeAllAlocated(){
 	free(path_to_dictionary);
 	free(path_to_passfile);
+	free(realBase);
 }
 
 int main(int argc, char **argv){
@@ -185,11 +207,14 @@ int main(int argc, char **argv){
 		path_to_dictionary = argv[1];
 		path_to_passfile = argv[2];
 	
-	printf("Path to Dictionary: %s\n",path_to_dictionary);
-	printf("Path to Passfile: %s\n",path_to_passfile);
+		printf("Path to Dictionary: %s\n",path_to_dictionary);
+		printf("Path to Passfile: %s\n",path_to_passfile);
 
-	iterateOverLinesInDictionary();
+		readPassBase();	
 
+		iterateOverLinesInDictionary();
+		
+		freeAllAlocated();
 	}
 		
 	return 0;
