@@ -27,12 +27,57 @@ char* getStringReplacedWithNumbers(char* input){
 			default: break;
 		}
 	}
-	//printf("Das ist ein Test!\n");
-
+	
 	return output;
 }
-int checkIfBase64SHA1Matches(char* word, char* base){
 
+int printFoundPassword(char* word, char* line){
+	printf("%s: %s",word,line);
+}
+
+int passwordMatchesInLine(char* word, char* base, char* line){
+	int offset;
+	int startpos = -1;
+	for(offset=0; offset<strlen(line); offset++){
+		if(line[offset]=='}'){
+			startpos=offset+1;
+			break;
+		}
+	}
+
+	if(startpos!=-1){
+		int length = strlen(line)-startpos-1;
+		char* realBase = (char*)malloc((length)*sizeof(char));
+		memcpy(realBase, &line[startpos],length);
+
+		int comp = strcmp(realBase,base);
+		free(realBase);
+
+		if(comp==0){		
+			printFoundPassword(word,line);
+		}
+	}
+	return 0;
+}
+
+int checkIfBase64SHA1Matches(char* word, char* base){
+	FILE *pass_file;
+	pass_file = fopen(path_to_passfile,"r");
+
+	if(!pass_file){
+		printf("Error: while opening Passfile");
+		return 1;
+	}
+
+	int lineBufferSize = 256;
+
+	char line[lineBufferSize];
+	
+	while(fgets(line, lineBufferSize, pass_file)){
+		passwordMatchesInLine(word,base, line);
+	}
+
+	
 }
 
 int checkIfIsPassword(char* word){
@@ -51,6 +96,7 @@ int checkIfIsPassword(char* word){
 	char* base = (char*)malloc(29*sizeof(char));
 	b64sha1(hash,base);
 
+	//printf("%s => %s\n",word,base);
 	checkIfBase64SHA1Matches(word,base);
 
 	return 0;
