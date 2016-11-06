@@ -179,7 +179,7 @@ int main(int argc, char **argv){
 		
 		savePassBase();
 		
-		//iterateOverLinesInDictionary();
+		iterateOverLinesInDictionary();
 		
 		freeAllAlocated();
 	}
