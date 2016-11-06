@@ -95,8 +95,8 @@ int checkVersionsOfWord(char word[], int word_length){
 	
 	getStringReplacedWithNumbers(alternWord);
 	
-	checkIfIsPassword("53cu217y");
-	//checkIfIsPassword(alternWord);	
+	checkIfIsPassword(word);
+	checkIfIsPassword(alternWord);	
 	
 	return 0;
 }
