@@ -5,8 +5,8 @@
 #include <openssl/sha.h>
 #include "util.h"
 
-char* path_to_dictionary = "rfc793.txt";
-char* path_to_passfile = "passfile";
+char* path_to_dictionary;
+char* path_to_passfile;
 FILE *pass_file;
 char* realBase;
 char* pass_file_line;
