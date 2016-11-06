@@ -106,6 +106,8 @@ int checkVersionsOfWord(char* word){
 	checkIfIsPassword(word);
 	checkIfIsPassword(alternWord);	
 	
+	free(alternWord);
+	
 	return 0;
 }
 
@@ -115,6 +117,8 @@ int word_found(char* line, int word_length, int position){
 	word[word_length] = '\0';
 		
 	checkVersionsOfWord(word);
+	
+	free(word);
 
 	return 0;
 }
