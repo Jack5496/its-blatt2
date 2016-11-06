@@ -90,7 +90,7 @@ int checkIfIsPassword(char word[]){
 	return 0;
 }
 
-int checkVersionsOfWord(char word[]){
+int checkVersionsOfWord(char* word){
 	char* alternWord=malloc(sizeof(char)*strlen(word));
 	memcpy(alternWord,word,strlen(word));
 	printf("AlternLength: %d\n",strlen(alternWord));
@@ -105,10 +105,12 @@ int checkVersionsOfWord(char word[]){
 }
 
 int word_found(char line[], int word_length, int position){
-	char word[word_length];
+	char* word=malloc(sizeof(char)*word_length);
 	memcpy(word, &line[position],word_length);
 		
 	checkVersionsOfWord(word);
+	
+	free(word);
 	
 	return 0;
 }
