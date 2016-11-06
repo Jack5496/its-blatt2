@@ -51,7 +51,6 @@ int passwordMatchesInLine(char* word, char* base, char* line){
 		memcpy(realBase, &line[startpos],length);
 
 		int comp = strcmp(realBase,base);
-		free(realBase);
 
 		if(comp==0){		
 			printFoundPassword(word,line);
@@ -96,7 +95,6 @@ int checkIfIsPassword(char* word){
 	char* base = (char*)malloc(29*sizeof(char));
 	b64sha1(hash,base);
 
-	//printf("%s => %s\n",word,base);
 	checkIfBase64SHA1Matches(word,base);
 
 	return 0;
@@ -143,7 +141,6 @@ int searchForWordsInLine(char* line){
 	}
 	
 	return found_words;
-	// what if line ends with word?
 }
 
 int iterateOverLinesInDictionary(){
@@ -157,8 +154,8 @@ int iterateOverLinesInDictionary(){
 	}
 
 	int lineBufferSize = 256;
-
 	char line[lineBufferSize];
+	
 	int line_number = 0;
 	int word_amount = 0;
 	while(fgets(line, lineBufferSize, dict_file)){
@@ -195,9 +192,6 @@ int main(int argc, char **argv){
 	printf("Path to Passfile: %s\n",path_to_passfile);
 
 	iterateOverLinesInDictionary();
-
-	free(path_to_dictionary);
-	free(path_to_passfile);
 
 	return 0;
 }
