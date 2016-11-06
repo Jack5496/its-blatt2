@@ -110,7 +110,7 @@ int word_found(char line[], int word_length, int position){
 	int i;
 	for(i=0;i<word_length;i++){
 		printf("%c",line[i+position]);	
-		word[i]=&line[i+position];
+		word[i]=line[i+position];
 	}
 	printf("Word: %s\n",word);	
 	
