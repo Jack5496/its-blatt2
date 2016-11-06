@@ -5,7 +5,10 @@
 #include <openssl/sha.h>
 #include "util.h"
 
-
+char* path_to_dictionary;
+char* path_to_passfile;
+char* passBase;
+char* pass_file_line;
 
 int getStringReplacedWithNumbers(char input[]){
 
@@ -168,10 +171,7 @@ int freeAllAlocated(){
 int main(int argc, char **argv){
 	printf("\n");
 	
-	char* path_to_dictionary;
-	char* path_to_passfile;
-	char* passBase;
-	char* pass_file_line;
+	
 	
 	if(argc==3){
 		path_to_dictionary = argv[1];
@@ -179,45 +179,7 @@ int main(int argc, char **argv){
 		FILE *pass_file;
 		
 		pass_file = fopen(path_to_passfile,"r");
-		
-		int lineBufferSize = 256;
-
-	char line[lineBufferSize];
-	
-	while(fgets(line, lineBufferSize, pass_file)){
-		int offset;
-		int startpos = -1;
-		for(offset=0; offset<strlen(line); offset++){
-			if(line[offset]=='}'){
-				startpos=offset+1;
-				break;
-			}
-		}
-
-		if(startpos!=-1){
-			int length = 29;
-			passBase = malloc(length*sizeof(char));
-			memcpy(passBase, &line[startpos],length-1);
-			passBase[length-1]='\0';
-			pass_file_line = malloc(strlen(line)*sizeof(char));
-			memcpy(pass_file_line, line,strlen(line)-1);
-		}
 	}
-	
-	fclose(pass_file);
-
-		iterateOverLinesInDictionary();
-		
-		free(passBase);
-	free(pass_file_line);;
-	}
-
-	if(!pass_file){
-		printf("Error: while opening Passfile");
-		return 1;
-	}
-		
-		
 
 	
 		
