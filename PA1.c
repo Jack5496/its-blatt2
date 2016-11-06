@@ -7,6 +7,8 @@
 
 char* path_to_dictionary = "rfc793.txt";
 char* path_to_passfile = "passfile";
+FILE *pass_file;
+char* realBase;
 
 char* getStringReplacedWithNumbers(char* input){
 	char* output = (char*)malloc(strlen(input) * sizeof(char));
@@ -35,32 +37,16 @@ int printFoundPassword(char* word, char* line){
 	printf("%s: %s",word,line);
 }
 
-int passwordMatchesInLine(char* word, char* base, char* line){
-	int offset;
-	int startpos = -1;
-	for(offset=0; offset<strlen(line); offset++){
-		if(line[offset]=='}'){
-			startpos=offset+1;
-			break;
-		}
+int checkPasswordMatches(char* word, char* base){
+	int comp = strcmp(realBase,base);
+
+	if(comp==0){		
+		printFoundPassword(word,line);
 	}
-
-	if(startpos!=-1){
-		int length = strlen(line)-startpos-1;
-		char* realBase = (char*)malloc((length)*sizeof(char));
-		memcpy(realBase, &line[startpos],length);
-
-		int comp = strcmp(realBase,base);
-
-		if(comp==0){		
-			printFoundPassword(word,line);
-		}
-	}
-	return 0;
 }
 
-int checkIfBase64SHA1Matches(char* word, char* base){
-	FILE *pass_file;
+int readBasedHashFromPassfile(){
+	
 	pass_file = fopen(path_to_passfile,"r");
 
 	if(!pass_file){
@@ -73,10 +59,21 @@ int checkIfBase64SHA1Matches(char* word, char* base){
 	char line[lineBufferSize];
 	
 	while(fgets(line, lineBufferSize, pass_file)){
-		passwordMatchesInLine(word,base, line);
-	}
+		int startpos = -1;
+		for(offset=0; offset<strlen(line); offset++){
+			if(line[offset]=='}'){
+				startpos=offset+1;
+				break;
+			}
+		}
 
-	
+		if(startpos!=-1){
+			int length = strlen(line)-startpos-1;
+			realBase = (char*)malloc((length)*sizeof(char));
+			memcpy(realBase, &line[startpos],length);
+		}	
+	}
+	return 0;
 }
 
 int checkIfIsPassword(char* word){
@@ -95,7 +92,7 @@ int checkIfIsPassword(char* word){
 	char* base = (char*)malloc(29*sizeof(char));
 	b64sha1(hash,base);
 
-	checkIfBase64SHA1Matches(word,base);
+	checkPasswordMatches(word,base);
 
 	return 0;
 }
@@ -171,11 +168,8 @@ int iterateOverLinesInDictionary(){
 
 int main(int argc, char **argv){
 	printf("\n");
-	
-	if(argc==1){
-		printf("Using standard Paths:\n");
-	}
-	else if(argc==3){
+
+	if(argc==3){
 		path_to_dictionary = (char*)malloc((strlen(argv[1])) * 
 					sizeof(char));
 		strcpy(path_to_dictionary,argv[1]);
@@ -183,15 +177,12 @@ int main(int argc, char **argv){
 		path_to_passfile = (char*)malloc(strlen(argv[2]) * 
 					sizeof(char));
 		strcpy(path_to_passfile,argv[2]);
-	}
-	else{
-		printf("Usage: PA1 PathToDictionary PathToPassfile\n");
+		
+		readBasedHashFromPassfile();
+
+		iterateOverLinesInDictionary();
 	}
 	
-	printf("Path to Dictionary: %s\n",path_to_dictionary);
-	printf("Path to Passfile: %s\n",path_to_passfile);
-
-	iterateOverLinesInDictionary();
 
 	return 0;
 }
