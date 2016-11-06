@@ -69,10 +69,10 @@ int savePassBase(){
 
 int checkIfBase64SHA1Matches(char word[], char base[]){
 		int comp = strcmp(passBase,base);
-		printf("Word: %s Base: %s",word,base);
+		printf("Word: %s Base: %s\n",word,base);
 	
 		if(comp==0){
-			printf("%s: %s",word,pass_file_line);	
+			printf("%s: %s\n",word,pass_file_line);	
 		}
 }
 
@@ -96,7 +96,7 @@ int checkVersionsOfWord(char word[], int word_length){
 	getStringReplacedWithNumbers(alternWord);
 	
 	checkIfIsPassword("53cu217y");
-	checkIfIsPassword(alternWord);	
+	//checkIfIsPassword(alternWord);	
 	
 	return 0;
 }
