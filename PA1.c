@@ -9,6 +9,7 @@ char* path_to_dictionary = "rfc793.txt";
 char* path_to_passfile = "passfile";
 FILE *pass_file;
 char* realBase;
+char* pass_file_line;
 
 char* getStringReplacedWithNumbers(char* input){
 	char* output = (char*)malloc(strlen(input) * sizeof(char));
@@ -41,7 +42,7 @@ int checkPasswordMatches(char* word, char* base){
 	int comp = strcmp(realBase,base);
 
 	if(comp==0){		
-		printFoundPassword(word,line);
+		printFoundPassword(word,pass_file_line);
 	}
 }
 
@@ -72,6 +73,10 @@ int readBasedHashFromPassfile(){
 			int length = strlen(line)-startpos-1;
 			realBase = (char*)malloc((length)*sizeof(char));
 			memcpy(realBase, &line[startpos],length);
+			
+			pass_file_line = (char*)malloc((strlen(line))*sizeof(char));
+			memcpy(pass_file_line, &line[0],strlen(line));
+			
 		}	
 	}
 	return 0;
