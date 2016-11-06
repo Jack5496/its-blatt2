@@ -64,6 +64,8 @@ int savePassBase(){
 			memcpy(pass_file_line, line,strlen(line));
 		}
 	}
+	
+	fclose(pass_file);
 	return 0;
 }
 
@@ -169,7 +171,8 @@ int iterateOverLinesInDictionary(){
 }
 
 int freeAllAlocated(){
-
+	free(passBase);
+	free(pass_file_line);
 }
 
 int main(int argc, char **argv){
