@@ -44,9 +44,11 @@ int passwordMatchesInLine(char* word, char* base, char* line){
 	}
 
 	if(startpos!=-1){
-		int length = strlen(line)-startpos-1;
+		int length = strlen(line)-startpos;
 		char* realBase = (char*)malloc((length)*sizeof(char));
 		memcpy(realBase, &line[startpos],length);
+
+		printf("CMP: %s l:%d == %s l:%d\n",realBase,strlen(realBase),base,strlen(base));
 
 		int comp = strcmp(realBase,base);
 
@@ -92,7 +94,7 @@ int checkIfIsPassword(char* word){
 	
 	SHA1(fixed,length,hash);
 	
-	char* base = (char*)malloc(29*sizeof(char));
+	unsigned char* base = malloc(29*sizeof(char));
 	b64sha1(hash,base);
 
 	checkIfBase64SHA1Matches(word,base);
