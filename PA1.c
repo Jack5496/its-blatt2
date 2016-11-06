@@ -77,7 +77,7 @@ int readBasedHashFromPassfile(){
 		}	
 	}
 	
-	flcose(pass_file);
+	fclose(pass_file);
 	
 	return 0;
 }
