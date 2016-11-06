@@ -8,7 +8,7 @@
 char* path_to_dictionary;
 char* path_to_passfile;
 FILE *pass_file;
-char passBase[];
+char* passBase;
 char* pass_file_line;
 
 int getStringReplacedWithNumbers(char* input){
@@ -58,7 +58,7 @@ int savePassBase(){
 
 		if(startpos!=-1){
 			int length = strlen(line)-startpos;
-			passBase[length];
+			passBase = malloc(length*sizeof(char));
 			memcpy(passBase, &line[startpos],length);
 			
 			pass_file_line = malloc(strlen(line)*sizeof(char));
