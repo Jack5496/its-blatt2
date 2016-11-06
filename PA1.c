@@ -7,7 +7,6 @@
 
 char* path_to_dictionary;
 char* path_to_passfile;
-FILE *pass_file;
 char* passBase;
 char* pass_file_line;
 
@@ -33,6 +32,7 @@ int getStringReplacedWithNumbers(char input[]){
 }
 
 int savePassBase(){
+	FILE *pass_file;
 	pass_file = fopen(path_to_passfile,"r");
 
 	if(!pass_file){
@@ -56,7 +56,6 @@ int savePassBase(){
 
 		if(startpos!=-1){
 			int length = 29;
-			//printf("PassBaseLength: %d\n",length);
 			passBase = malloc(length*sizeof(char));
 			memcpy(passBase, &line[startpos],length-1);
 			passBase[length-1]='\0';
@@ -71,7 +70,6 @@ int savePassBase(){
 
 int checkIfBase64SHA1Matches(char word[], char base[]){
 		int comp = strcmp(passBase,base);
-		//printf("Base: %s | PassBase: %s\n",base,passBase);
 	
 		if(comp==0){
 			printf("%s: %s\n",word,pass_file_line);	
@@ -79,12 +77,8 @@ int checkIfBase64SHA1Matches(char word[], char base[]){
 }
 
 int checkIfIsPassword(char word[]){	
-	//printf("Check if is Pass\n");
 	unsigned char hash[SHA_DIGEST_LENGTH];
 	
-	//word[strlen(word)-1]='\0';
-	//printf("Word: %s\n",word);
-	//printf("Wordlength: %d\n",strlen(word));
 	SHA1(word,strlen(word),hash);
 	
 	unsigned char base[29];
@@ -121,7 +115,6 @@ int word_found(char line[], int word_length, int position){
 		word[i]=line[i+position];
 	}
 	word[word_length]='\0';
-	//printf("Word: %s\n",word);	
 	
 	checkVersionsOfWord(word,word_length);
 	
