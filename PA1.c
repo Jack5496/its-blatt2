@@ -98,7 +98,7 @@ int checkIfBase64SHA1Matches(char* word, char* base){
 	int comp = strcmp(realBase,base);
 
 	if(comp==0){		
-		printFoundPassword(word,line);
+		printFoundPassword(word,pass_file_line);
 	}
 }
 
