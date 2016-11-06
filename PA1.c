@@ -166,7 +166,7 @@ int freeAllAlocated(){
 int main(int argc, char **argv){
 	printf("\n");
 	
-	else if(argc==3){
+	if(argc==3){
 		path_to_dictionary = argv[1];
 		path_to_passfile = argv[2];
 	
