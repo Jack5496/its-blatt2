@@ -61,7 +61,7 @@ int savePassBase(){
 			memcpy(passBase, &line[startpos],length);
 			
 			pass_file_line = malloc(strlen(line)*sizeof(char));
-			memcpy(pass_file_line, &line[0],strlen(line));
+			memcpy(pass_file_line, line,strlen(line));
 		}
 	}
 	return 0;
@@ -88,10 +88,9 @@ int checkIfIsPassword(char word[]){
 	return 0;
 }
 
-int checkVersionsOfWord(char* word){
-	int word_length = strlen(word);
+int checkVersionsOfWord(char* word,word_length){
 	char alternWord[word_length];
-	memcpy(alternWord,&word[0],word_length);
+	memcpy(alternWord,word,word_length);
 	
 	getStringReplacedWithNumbers(alternWord);
 	
@@ -105,7 +104,7 @@ int word_found(char line[], int word_length, int position){
 	char word[word_length];
 	memcpy(word, &line[position],word_length);
 		
-	checkVersionsOfWord(word);
+	checkVersionsOfWord(word,word_length);
 	
 	return 0;
 }
