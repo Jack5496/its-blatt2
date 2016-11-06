@@ -118,8 +118,6 @@ int word_found(char* line, int word_length, int position){
 		
 	checkVersionsOfWord(word);
 	
-	free(word);
-
 	return 0;
 }
 
