@@ -8,6 +8,7 @@
 char* path_to_dictionary;
 char* path_to_passfile;
 char* realBase;
+char* pass_file_line;
 
 int getStringReplacedWithNumbers(char* input){
 
@@ -48,7 +49,10 @@ int passwordMatchesInLine(char* word, char* base, char* line){
 		int length = strlen(line)-startpos-1;
 		realBase = (char*)malloc((length)*sizeof(char));
 		memcpy(realBase, &line[startpos],length);
-
+		
+		pass_file_line = (char*)malloc((strlen(line))*sizeof(char));
+		memcpy(pass_file_line, &line[0],strlen(line));
+		
 		int comp = strcmp(realBase,base);
 
 		if(comp==0){		
@@ -195,6 +199,7 @@ int freeAllAlocated(){
 	free(path_to_dictionary);
 	free(path_to_passfile);
 	free(realBase);
+	free(pass_file_line);
 }
 
 int main(int argc, char **argv){
