@@ -60,6 +60,7 @@ int readBasedHashFromPassfile(){
 	
 	while(fgets(line, lineBufferSize, pass_file)){
 		int startpos = -1;
+		int offset;
 		for(offset=0; offset<strlen(line); offset++){
 			if(line[offset]=='}'){
 				startpos=offset+1;
