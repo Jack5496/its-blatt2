@@ -60,7 +60,7 @@ int savePassBase(){
 			memcpy(passBase, &line[startpos],length-1);
 			passBase[length-1]='\0';
 			pass_file_line = malloc((strlen(line))*sizeof(char));
-			memcpy(pass_file_line, &line[0],strlen(line));
+			memcpy(pass_file_line, &line[0],strlen(line)-1);
 		}
 	}
 	
