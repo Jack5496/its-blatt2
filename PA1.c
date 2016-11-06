@@ -98,7 +98,7 @@ int checkVersionsOfWord(char* word, int word_length){
 	
 	int i;
 	for(i=0;i<word_length+1;i++){
-		alternWord[i]=line[i+position];
+		alternWord[i]=word[i];
 	}
 	alternWord[word_length]='\0';
 	
