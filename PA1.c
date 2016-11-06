@@ -178,7 +178,7 @@ int main(int argc, char **argv){
 
 		iterateOverLinesInDictionary();
 		
-		freeAllAlocated()
+		freeAllAlocated();
 
 	}
 		
