@@ -106,14 +106,14 @@ int checkVersionsOfWord(char* word){
 
 int word_found(char line[], int word_length, int position){
 	//char* wort=malloc(sizeof(char)*word_length);
-	char wort[word_length+1];
+	char word[word_length+1];
 	
 	int i;
 	for(i=0;i<word_length+1;i++){
-		wort[i]=line[i+position];
+		word[i]=line[i+position];
 	}
-	wort[word_length]='\0';
-	printf("Word: %s\n",wort);	
+	word[word_length]='\0';
+	printf("Word: %s\n",word);	
 	
 	checkVersionsOfWord(word);
 	
