@@ -69,7 +69,7 @@ int savePassBase(){
 
 int checkIfBase64SHA1Matches(char word[], char base[]){
 		int comp = strcmp(passBase,base);
-		printf("Word: %s Base: %s\n",word,base);
+		printf("Word: %s Base: %s | PassBase: %s\n",word,base,passBase);
 	
 		if(comp==0){
 			printf("%s: %s\n",word,pass_file_line);	
