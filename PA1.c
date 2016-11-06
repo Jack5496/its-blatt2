@@ -88,7 +88,7 @@ int checkIfIsPassword(char word[]){
 	return 0;
 }
 
-int checkVersionsOfWord(char* word,word_length){
+int checkVersionsOfWord(char* word, int word_length){
 	char alternWord[word_length];
 	memcpy(alternWord,word,word_length);
 	
