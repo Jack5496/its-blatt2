@@ -55,11 +55,11 @@ int savePassBase(){
 		}
 
 		if(startpos!=-1){
-			int length = 28;
+			int length = 29;
 			//printf("PassBaseLength: %d\n",length);
 			passBase = malloc(length*sizeof(char));
 			memcpy(passBase, &line[startpos],length);
-			
+			passBase[length-1]='\0';
 			pass_file_line = malloc(strlen(line)*sizeof(char));
 			memcpy(pass_file_line, line,strlen(line));
 		}
