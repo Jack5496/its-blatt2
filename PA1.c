@@ -82,7 +82,7 @@ int checkIfIsPassword(char word[]){
 	printf("Wordlength: %d\n",strlen(word));
 	SHA1(word,strlen(word),hash);
 	
-	unsigned char base[29];
+	unsigned char base[28];
 	b64sha1(hash,base);
 
 	checkIfBase64SHA1Matches(word,base);
