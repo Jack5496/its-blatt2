@@ -5,8 +5,8 @@
 #include <openssl/sha.h>
 #include "util.h"
 
-char* path_to_dictionary = "rfc793.txt";
-char* path_to_passfile = "passfile";
+char* path_to_dictionary;
+char* path_to_passfile;
 
 char* getStringReplacedWithNumbers(char* input){
 	char* output = (char*)malloc(strlen(input) * sizeof(char));
@@ -168,6 +168,10 @@ int iterateOverLinesInDictionary(){
 	return 0;
 }
 
+int freeAllAlocated(){
+	free(path_to_dictionary);
+	free(path_to_passfile);
+}
 
 int main(int argc, char **argv){
 	printf("\n");
@@ -176,22 +180,15 @@ int main(int argc, char **argv){
 		printf("Using standard Paths:\n");
 	}
 	else if(argc==3){
-		path_to_dictionary = (char*)malloc((strlen(argv[1])) * 
-					sizeof(char));
-		strcpy(path_to_dictionary,argv[1]);
-
-		path_to_passfile = (char*)malloc(strlen(argv[2]) * 
-					sizeof(char));
-		strcpy(path_to_passfile,argv[2]);
-	}
-	else{
-		printf("Usage: PA1 PathToDictionary PathToPassfile\n");
-	}
+		path_to_dictionary = argv[1];
+		path_to_passfile = argv[2];
 	
 	printf("Path to Dictionary: %s\n",path_to_dictionary);
 	printf("Path to Passfile: %s\n",path_to_passfile);
 
 	iterateOverLinesInDictionary();
 
+	}
+		
 	return 0;
 }
