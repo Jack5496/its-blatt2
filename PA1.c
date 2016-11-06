@@ -79,6 +79,7 @@ int checkIfBase64SHA1Matches(char* word, char* base){
 
 int checkIfIsPassword(char* word){
 	int old_size = strlen(word);
+	int length = old_size;
 	/**
 	char fixed[old_size+1];
 
