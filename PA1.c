@@ -5,46 +5,62 @@
 #include <openssl/sha.h>
 #include "util.h"
 
-char* path_to_dictionary;
-char* path_to_passfile;
-FILE *pass_file;
-char* realBase;
-char* pass_file_line;
+char* path_to_dictionary = "rfc793.txt";
+char* path_to_passfile = "passfile";
 
-int getStringReplacedWithNumbers(char* input){
+char* getStringReplacedWithNumbers(char* input){
+	char* output = (char*)malloc(strlen(input) * sizeof(char));
+	strcpy(output,input);
+
 	int i;
-	for(i=0; i<strlen(input); i++){
-		switch(input[i]){
-			case 'o': case 'O': input[i] = '0'; break;
-			case 'i': case 'I': input[i] = '1'; break;
-			case 'r': case 'R': input[i] = '2'; break;
-			case 'e': case 'E': input[i] = '3'; break;
-			case 'a': case 'A': input[i] = '4'; break;
-			case 's': case 'S': input[i] = '5'; break;
-			case 't': case 'T': input[i] = '7'; break;
-			case 'b': case 'B': input[i] = '8'; break;
-			case 'g': case 'G': input[i] = '9'; break;
+	for(i=0; i<strlen(output); i++){
+		switch(output[i]){
+			case 'o': case 'O': output[i] = '0'; break;
+			case 'i': case 'I': output[i] = '1'; break;
+			case 'r': case 'R': output[i] = '2'; break;
+			case 'e': case 'E': output[i] = '3'; break;
+			case 'a': case 'A': output[i] = '4'; break;
+			case 's': case 'S': output[i] = '5'; break;
+			case 't': case 'T': output[i] = '7'; break;
+			case 'b': case 'B': output[i] = '8'; break;
+			case 'g': case 'G': output[i] = '9'; break;
 			default: break;
 		}
 	}
 	
-	return 0;
+	return output;
 }
 
 int printFoundPassword(char* word, char* line){
 	printf("%s: %s",word,line);
 }
 
-int checkPasswordMatches(char* word, char* base){
-	int comp = strcmp(realBase,base);
-
-	if(comp==0){		
-		printFoundPassword(word,pass_file_line);
+int passwordMatchesInLine(char* word, char* base, char* line){
+	int offset;
+	int startpos = -1;
+	for(offset=0; offset<strlen(line); offset++){
+		if(line[offset]=='}'){
+			startpos=offset+1;
+			break;
+		}
 	}
+
+	if(startpos!=-1){
+		int length = strlen(line)-startpos-1;
+		char* realBase = (char*)malloc((length)*sizeof(char));
+		memcpy(realBase, &line[startpos],length);
+
+		int comp = strcmp(realBase,base);
+
+		if(comp==0){		
+			printFoundPassword(word,line);
+		}
+	}
+	return 0;
 }
 
-int readBasedHashFromPassfile(){
-	
+int checkIfBase64SHA1Matches(char* word, char* base){
+	FILE *pass_file;
 	pass_file = fopen(path_to_passfile,"r");
 
 	if(!pass_file){
@@ -57,29 +73,10 @@ int readBasedHashFromPassfile(){
 	char line[lineBufferSize];
 	
 	while(fgets(line, lineBufferSize, pass_file)){
-		int startpos = -1;
-		int offset;
-		for(offset=0; offset<strlen(line); offset++){
-			if(line[offset]=='}'){
-				startpos=offset+1;
-				break;
-			}
-		}
-
-		if(startpos!=-1){
-			int length = strlen(line)-startpos-1;
-			realBase = (char*)malloc((length)*sizeof(char));
-			memcpy(realBase, &line[startpos],length);
-			
-			pass_file_line = (char*)malloc((strlen(line))*sizeof(char));
-			memcpy(pass_file_line, &line[0],strlen(line));
-			
-		}	
+		passwordMatchesInLine(word,base, line);
 	}
+
 	
-	fclose(pass_file);
-	
-	return 0;
 }
 
 int checkIfIsPassword(char* word){
@@ -98,22 +95,16 @@ int checkIfIsPassword(char* word){
 	char* base = (char*)malloc(29*sizeof(char));
 	b64sha1(hash,base);
 
-	checkPasswordMatches(word,base);
-	
-	free(base);
+	checkIfBase64SHA1Matches(word,base);
 
 	return 0;
 }
 
 int checkVersionsOfWord(char* word){
-	char* alternWord = (char*)malloc(sizeof(char)*strlen(word));
-	memcpy(alternWord,word,strlen(word));
-	getStringReplacedWithNumbers(alternWord);
+	char* alternWord = getStringReplacedWithNumbers(word);
 	
 	checkIfIsPassword(word);
 	checkIfIsPassword(alternWord);	
-	
-	free(alternWord);
 	
 	return 0;
 }
@@ -124,9 +115,7 @@ int word_found(char* line, int word_length, int position){
 	word[word_length] = '\0';
 		
 	checkVersionsOfWord(word);
-	
-	free(word);
-	
+
 	return 0;
 }
 
@@ -179,25 +168,30 @@ int iterateOverLinesInDictionary(){
 	return 0;
 }
 
-int freeAllAllocated(){
-	free(realBase);
-	free(pass_file_line);	
-}
 
 int main(int argc, char **argv){
 	printf("\n");
+	
+	if(argc==1){
+		printf("Using standard Paths:\n");
+	}
+	else if(argc==3){
+		path_to_dictionary = (char*)malloc((strlen(argv[1])) * 
+					sizeof(char));
+		strcpy(path_to_dictionary,argv[1]);
 
-	if(argc==3){
-		path_to_dictionary = argv[1];
-		path_to_passfile = argv[2];
-		
-		readBasedHashFromPassfile();
-
-		iterateOverLinesInDictionary();
-		
-		freeAllAllocated();
+		path_to_passfile = (char*)malloc(strlen(argv[2]) * 
+					sizeof(char));
+		strcpy(path_to_passfile,argv[2]);
+	}
+	else{
+		printf("Usage: PA1 PathToDictionary PathToPassfile\n");
 	}
 	
+	printf("Path to Dictionary: %s\n",path_to_dictionary);
+	printf("Path to Passfile: %s\n",path_to_passfile);
+
+	iterateOverLinesInDictionary();
 
 	return 0;
 }
