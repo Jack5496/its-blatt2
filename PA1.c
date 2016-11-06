@@ -56,11 +56,11 @@ int savePassBase(){
 
 		if(startpos!=-1){
 			int length = 29;
-			passBase = malloc((length)*sizeof(char));
-			memcpy(passBase, &line[startpos],length);
-			passBase[length]='\0';
-			pass_file_line = malloc((strlen(line))*sizeof(char));
-			memcpy(pass_file_line, line,strlen(line)-1);
+			passBase = malloc(length*sizeof(char));
+			memcpy(passBase, &line[startpos],length-1);
+			passBase[length-1]='\0';
+			//pass_file_line = malloc(strlen(line)*sizeof(char));
+			//memcpy(pass_file_line, line,strlen(line)-1);
 		}
 	}
 	
@@ -165,7 +165,7 @@ int iterateOverLinesInDictionary(){
 
 int freeAllAlocated(){
 	free(passBase);
-	free(pass_file_line);
+	//free(pass_file_line);
 }
 
 int main(int argc, char **argv){
@@ -179,7 +179,7 @@ int main(int argc, char **argv){
 		
 		savePassBase();
 		
-		iterateOverLinesInDictionary();
+		//iterateOverLinesInDictionary();
 		
 		freeAllAlocated();
 	}
