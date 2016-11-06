@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <openssl/sha.h>
+#include "util.h"
 
 char* path_to_dictionary = "rfc793.txt";
 char* path_to_passfile = "passfile";
@@ -30,20 +31,29 @@ char* getStringReplacedWithNumbers(char* input){
 
 	return output;
 }
+int checkIfBase64SHA1Matches(char* word, char* base){
+
+}
 
 int checkIfIsPassword(char* word){
-	size_t length = sizeof(word);
-	unsigned char digest[SHA_DIGEST_LENGTH];
-	SHA1((unsigned char*)&word, length,(unsigned char*)&digest);
-	int i;
+	int old_size = strlen(word);
+	char fixed[old_size+1];
 
-	char mdString[SHA_DIGEST_LENGTH*2+1];
-	for(i=0; i< SHA_DIGEST_LENGTH; i++){
-		sprintf(&mdString[i*2], "%02x",(unsigned int)digest[i]);
-	}
+	int pos;
+	for(pos=0;pos<old_size; pos++){
+		fixed[pos]=word[pos];
+	}	
+	fixed[old_size] = '\0';
+	size_t length = strlen(fixed);
 
-	printf("SHA: %s\n",mdString);
-	
+	unsigned char hash[SHA_DIGEST_LENGTH];
+	SHA1(fixed,length,hash);	
+	char* base = (char*)malloc(29*sizeof(char));
+	b64sha1(hash,base);
+
+	checkIfBase64SHA1Matches(word,base);
+
+	return 0;
 }
 
 int checkVersionsOfWord(char* word){
@@ -52,19 +62,15 @@ int checkVersionsOfWord(char* word){
 	checkIfIsPassword(word);
 	checkIfIsPassword(alternWord);	
 	
-	free(alternWord);
 	return 0;
 }
 
 int word_found(char* line, int word_length, int position){
-	char* word = (char*)malloc((word_length+1)*sizeof(char));
+	char* word = (char*)malloc((word_length)*sizeof(char));
 	memcpy(word, &line[position-word_length],word_length);
 	word[word_length] = '\0';
-	//printf("%s ",word);
-
+		
 	checkVersionsOfWord(word);
-
-	free(word);
 
 	return 0;
 }
