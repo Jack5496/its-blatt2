@@ -1,9 +1,6 @@
 #include<stdio.h> //For standard things
 #include<stdlib.h>    //malloc
 #include<string.h>    //memset
-#include<netinet/ip_icmp.h>   //Provides declarations for icmp header
-#include<netinet/udp.h>   //Provides declarations for udp header
-#include<netinet/tcp.h>   //Provides declarations for tcp header
 #include<netinet/ip.h>    //Provides declarations for ip header
 #include<sys/socket.h>
 #include<arpa/inet.h>
@@ -14,12 +11,10 @@
 void ProcessPacket(unsigned char* , int);
 void print_ip_header(unsigned char* , int);
 void print_tcp_packet(unsigned char* , int);
-void print_udp_packet(unsigned char * , int);
-void print_icmp_packet(unsigned char* , int);
 void PrintData (unsigned char* , int);
  
 int sock_raw;
-int tcp=0,udp=0,icmp=0,others=0,igmp=0,total=0,i,j;
+int tcp=0,others=0,total=0,i,j;
 struct sockaddr_in source,dest;
 
 void print_tcp_packet(unsigned char* Buffer, int Size)
@@ -37,23 +32,23 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
          
     printf("\n");
     printf("TCP Header\n");
-    //fprintf(logfile,"   |-Source Port      : %u\n",ntohs(tcph->source));
-    //fprintf(logfile,"   |-Destination Port : %u\n",ntohs(tcph->dest));
-    //fprintf(logfile,"   |-Sequence Number    : %u\n",ntohl(tcph->seq));
-    //fprintf(logfile,"   |-Acknowledge Number : %u\n",ntohl(tcph->ack_seq));
-    //fprintf(logfile,"   |-Header Length      : %d DWORDS or %d BYTES\n" ,(unsigned int)tcph->doff,(unsigned int)tcph->doff*4);
-    //fprintf(logfile,"   |-CWR Flag : %d\n",(unsigned int)tcph->cwr);
-    //fprintf(logfile,"   |-ECN Flag : %d\n",(unsigned int)tcph->ece);
-    //fprintf(logfile,"   |-Urgent Flag          : %d\n",(unsigned int)tcph->urg);
-    //fprintf(logfile,"   |-Acknowledgement Flag : %d\n",(unsigned int)tcph->ack);
-    //fprintf(logfile,"   |-Push Flag            : %d\n",(unsigned int)tcph->psh);
-    //fprintf(logfile,"   |-Reset Flag           : %d\n",(unsigned int)tcph->rst);
-    //fprintf(logfile,"   |-Synchronise Flag     : %d\n",(unsigned int)tcph->syn);
-    //fprintf(logfile,"   |-Finish Flag          : %d\n",(unsigned int)tcph->fin);
-    //fprintf(logfile,"   |-Window         : %d\n",ntohs(tcph->window));
-    //fprintf(logfile,"   |-Checksum       : %d\n",ntohs(tcph->check));
-    //fprintf(logfile,"   |-Urgent Pointer : %d\n",tcph->urg_ptr);
-    printf("\n");
+    printf("   |-Source Port      : %u\n",ntohs(tcph->source));
+    printf("   |-Destination Port : %u\n",ntohs(tcph->dest));
+    printf("   |-Sequence Number    : %u\n",ntohl(tcph->seq));
+    printf("   |-Acknowledge Number : %u\n",ntohl(tcph->ack_seq));
+    printf("   |-Header Length      : %d DWORDS or %d BYTES\n" ,(unsigned int)tcph->doff,(unsigned int)tcph->doff*4);
+    printf("   |-CWR Flag : %d\n",(unsigned int)tcph->cwr);
+    printf("   |-ECN Flag : %d\n",(unsigned int)tcph->ece);
+    printf("   |-Urgent Flag          : %d\n",(unsigned int)tcph->urg);
+    printf("   |-Acknowledgement Flag : %d\n",(unsigned int)tcph->ack);
+    printf("   |-Push Flag            : %d\n",(unsigned int)tcph->psh);
+    printf("   |-Reset Flag           : %d\n",(unsigned int)tcph->rst);
+    printf("   |-Synchronise Flag     : %d\n",(unsigned int)tcph->syn);
+    printf("   |-Finish Flag          : %d\n",(unsigned int)tcph->fin);
+    printf("   |-Window         : %d\n",ntohs(tcph->window));
+    printf("   |-Checksum       : %d\n",ntohs(tcph->check));
+    printf("   |-Urgent Pointer : %d\n",tcph->urg_ptr);
+    printf(\n");
     printf("                        DATA Dump                         ");
     printf("\n");
          
@@ -112,10 +107,6 @@ void ProcessPacket(unsigned char* buffer, int size)
     ++total;
     switch (iph->protocol) //Check the Protocol and do accordingly...
     {
-        case 1:  //ICMP Protocol
-            ++icmp;
-            //PrintIcmpPacket(Buffer,Size);
-            break;
         case 6:  //TCP Protocol
             ++tcp;
             print_tcp_packet(buffer , size);
