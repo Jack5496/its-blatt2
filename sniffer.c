@@ -22,7 +22,7 @@ int main(int argc, char **argv){
     struct sockaddr saddr;
     struct in_addr in;
      
-    char *buffer = (unsigned char *)malloc(65536); //Its Big!
+    unsigned char *buffer = (unsigned char *)malloc(65536); //Its Big!
      
     logfile=fopen("log.txt","w");
     if(logfile==NULL) printf("Unable to create file.");
@@ -104,11 +104,11 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
     fprintf(logfile,"                        DATA Dump                         ");
     fprintf(logfile,"\n");
  
-    int data_payload_size = (Size-data_payload+Buffer);
+    int data_payload_size = (Size-((unsigned char* )data_payload)+Buffer);
  
     fprintf(logfile,"Data Payload\n");  
     fprintf(logfile,data_payload,8*8);
-    PrintData(Buffer + data_payload, data_payload_size);
+    PrintData(Buffer + ((unsigned char* )data_payload), data_payload_size);
                          
     fprintf(logfile,"\n###########################################################");
 }
