@@ -20,7 +20,6 @@ int tcp=0,udp=0,icmp=0,others=0,igmp=0,total=0,i,j;
 struct sockaddr_in source,dest;
  
 int main(int argc, char **argv){
-{
     int saddr_size , data_size;
     struct sockaddr saddr;
     struct in_addr in;
