@@ -13,55 +13,11 @@ void print_tcp_packet(unsigned char* , int);
 void PrintData (unsigned char* , int);
  
 int sock_raw;
+FILE *logfile;
 int tcp=0,others=0,total=0,i,j;
 struct sockaddr_in source,dest;
 
-void print_tcp_packet(unsigned char* Buffer, int Size)
-{
-    unsigned short iphdrlen;
-     
-    struct iphdr *iph = (struct iphdr *)Buffer;
-    iphdrlen = iph->ihl*4;
-     
-    struct tcphdr *tcph=(struct tcphdr*)(Buffer + iphdrlen);
-             
-    printf("\n\n***********************TCP Packet*************************\n");    
-         
-    print_ip_header(Buffer,Size);
-         
-    printf("\n");
-    printf("TCP Header\n");
-    printf("   |-Source Port      : %u\n",ntohs(tcph->source));
-    printf("   |-Destination Port : %u\n",ntohs(tcph->dest));
-    printf("   |-Sequence Number    : %u\n",ntohl(tcph->seq));
-    printf("   |-Acknowledge Number : %u\n",ntohl(tcph->ack_seq));
-    printf("   |-Header Length      : %d DWORDS or %d BYTES\n" ,(unsigned int)tcph->doff,(unsigned int)tcph->doff*4);
-    printf("   |-CWR Flag : %d\n",(unsigned int)tcph->cwr);
-    printf("   |-ECN Flag : %d\n",(unsigned int)tcph->ece);
-    printf("   |-Urgent Flag          : %d\n",(unsigned int)tcph->urg);
-    printf("   |-Acknowledgement Flag : %d\n",(unsigned int)tcph->ack);
-    printf("   |-Push Flag            : %d\n",(unsigned int)tcph->psh);
-    printf("   |-Reset Flag           : %d\n",(unsigned int)tcph->rst);
-    printf("   |-Synchronise Flag     : %d\n",(unsigned int)tcph->syn);
-    printf("   |-Finish Flag          : %d\n",(unsigned int)tcph->fin);
-    printf("   |-Window         : %d\n",ntohs(tcph->window));
-    printf("   |-Checksum       : %d\n",ntohs(tcph->check));
-    printf("   |-Urgent Pointer : %d\n",tcph->urg_ptr);
-    printf("\n");
-    printf("                        DATA Dump                         ");
-    printf("\n");
-         
-    printf("IP Header\n");
-    PrintData(Buffer,iphdrlen);
-         
-    printf("TCP Header\n");
-    //PrintData(Buffer+iphdrlen,tcph->doff*4);
-         
-    printf("Data Payload\n");  
-    PrintData(Buffer + iphdrlen + tcph->doff*4 , (Size - tcph->doff*4-iph->ihl*4) );
-                         
-    printf("\n###########################################################");
-}
+
 
 /**
 * Die Main Function in der Das Programm einsetzt
@@ -130,21 +86,68 @@ void print_ip_header(unsigned char* Buffer, int Size)
     memset(&dest, 0, sizeof(dest));
     dest.sin_addr.s_addr = iph->daddr;
      
-    printf("\n");
-    printf("IP Header\n");
-    printf("   |-IP Version        : %d\n",(unsigned int)iph->version);
-    printf("   |-IP Header Length  : %d DWORDS or %d Bytes\n",(unsigned int)iph->ihl,((unsigned int)(iph->ihl))*4);
-    printf("   |-Type Of Service   : %d\n",(unsigned int)iph->tos);
-    printf("   |-IP Total Length   : %d  Bytes(Size of Packet)\n",ntohs(iph->tot_len));
-    printf("   |-Identification    : %d\n",ntohs(iph->id));
+    fprintf(logfile,"\n");
+    fprintf(logfile,"IP Header\n");
+    fprintf(logfile,"   |-IP Version        : %d\n",(unsigned int)iph->version);
+    fprintf(logfile,"   |-IP Header Length  : %d DWORDS or %d Bytes\n",(unsigned int)iph->ihl,((unsigned int)(iph->ihl))*4);
+    fprintf(logfile,"   |-Type Of Service   : %d\n",(unsigned int)iph->tos);
+    fprintf(logfile,"   |-IP Total Length   : %d  Bytes(Size of Packet)\n",ntohs(iph->tot_len));
+    fprintf(logfile,"   |-Identification    : %d\n",ntohs(iph->id));
     //fprintf(logfile,"   |-Reserved ZERO Field   : %d\n",(unsigned int)iphdr->ip_reserved_zero);
     //fprintf(logfile,"   |-Dont Fragment Field   : %d\n",(unsigned int)iphdr->ip_dont_fragment);
     //fprintf(logfile,"   |-More Fragment Field   : %d\n",(unsigned int)iphdr->ip_more_fragment);
-    printf("   |-TTL      : %d\n",(unsigned int)iph->ttl);
-    printf("   |-Protocol : %d\n",(unsigned int)iph->protocol);
-    printf("   |-Checksum : %d\n",ntohs(iph->check));
-    printf("   |-Source IP        : %s\n",inet_ntoa(source.sin_addr));
-    printf("   |-Destination IP   : %s\n",inet_ntoa(dest.sin_addr));
+    fprintf(logfile,"   |-TTL      : %d\n",(unsigned int)iph->ttl);
+    fprintf(logfile,"   |-Protocol : %d\n",(unsigned int)iph->protocol);
+    fprintf(logfile,"   |-Checksum : %d\n",ntohs(iph->check));
+    fprintf(logfile,"   |-Source IP        : %s\n",inet_ntoa(source.sin_addr));
+    fprintf(logfile,"   |-Destination IP   : %s\n",inet_ntoa(dest.sin_addr));
+}
+
+void print_tcp_packet(unsigned char* Buffer, int Size)
+{
+    unsigned short iphdrlen;
+     
+    struct iphdr *iph = (struct iphdr *)Buffer;
+    iphdrlen = iph->ihl*4;
+     
+    struct tcphdr *tcph=(struct tcphdr*)(Buffer + iphdrlen);
+             
+    fprintf(logfile,"\n\n***********************TCP Packet*************************\n");    
+         
+    print_ip_header(Buffer,Size);
+         
+    fprintf(logfile,"\n");
+    fprintf(logfile,"TCP Header\n");
+    fprintf(logfile,"   |-Source Port      : %u\n",ntohs(tcph->source));
+    fprintf(logfile,"   |-Destination Port : %u\n",ntohs(tcph->dest));
+    fprintf(logfile,"   |-Sequence Number    : %u\n",ntohl(tcph->seq));
+    fprintf(logfile,"   |-Acknowledge Number : %u\n",ntohl(tcph->ack_seq));
+    fprintf(logfile,"   |-Header Length      : %d DWORDS or %d BYTES\n" ,(unsigned int)tcph->doff,(unsigned int)tcph->doff*4);
+    //fprintf(logfile,"   |-CWR Flag : %d\n",(unsigned int)tcph->cwr);
+    //fprintf(logfile,"   |-ECN Flag : %d\n",(unsigned int)tcph->ece);
+    fprintf(logfile,"   |-Urgent Flag          : %d\n",(unsigned int)tcph->urg);
+    fprintf(logfile,"   |-Acknowledgement Flag : %d\n",(unsigned int)tcph->ack);
+    fprintf(logfile,"   |-Push Flag            : %d\n",(unsigned int)tcph->psh);
+    fprintf(logfile,"   |-Reset Flag           : %d\n",(unsigned int)tcph->rst);
+    fprintf(logfile,"   |-Synchronise Flag     : %d\n",(unsigned int)tcph->syn);
+    fprintf(logfile,"   |-Finish Flag          : %d\n",(unsigned int)tcph->fin);
+    fprintf(logfile,"   |-Window         : %d\n",ntohs(tcph->window));
+    fprintf(logfile,"   |-Checksum       : %d\n",ntohs(tcph->check));
+    fprintf(logfile,"   |-Urgent Pointer : %d\n",tcph->urg_ptr);
+    fprintf(logfile,"\n");
+    fprintf(logfile,"                        DATA Dump                         ");
+    fprintf(logfile,"\n");
+         
+    fprintf(logfile,"IP Header\n");
+    PrintData(Buffer,iphdrlen);
+         
+    fprintf(logfile,"TCP Header\n");
+    PrintData(Buffer+iphdrlen,tcph->doff*4);
+         
+    fprintf(logfile,"Data Payload\n");  
+    PrintData(Buffer + iphdrlen + tcph->doff*4 , (Size - tcph->doff*4-iph->ihl*4) );
+                         
+    fprintf(logfile,"\n###########################################################");
 }
  
 void PrintData (unsigned char* data , int Size)
