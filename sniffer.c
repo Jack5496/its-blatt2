@@ -103,14 +103,10 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
     fprintf(logfile,"\n");
     fprintf(logfile,"                        DATA Dump                         ");
     fprintf(logfile,"\n");
-         
-    fprintf(logfile,"IP Header\n");
-    PrintData(Buffer,iphdrlen);
-         
-    fprintf(logfile,"TCP Header\n");
-    PrintData(Buffer+iphdrlen,tcph->doff*4);
-         
-    fprintf(logfile,"Data Payload\n");  
+    
+    int payload_amount = get_tcp_payload(Buffer,iph*,tcph*);
+ 
+    fprintf(logfile,"Data Payload %d\n",payload_amount);  
     PrintData(Buffer + iphdrlen + tcph->doff*4 , (Size - tcph->doff*4-iph->ihl*4) );
                          
     fprintf(logfile,"\n###########################################################");
