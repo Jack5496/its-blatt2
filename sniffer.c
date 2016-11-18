@@ -30,12 +30,12 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
      
     struct tcphdr *tcph=(struct tcphdr*)(Buffer + iphdrlen);
              
-    fprintf("\n\n***********************TCP Packet*************************\n");    
+    printf("\n\n***********************TCP Packet*************************\n");    
          
     print_ip_header(Buffer,Size);
          
-    fprintf("\n");
-    fprintf("TCP Header\n");
+    printf("\n");
+    printf("TCP Header\n");
     //fprintf(logfile,"   |-Source Port      : %u\n",ntohs(tcph->source));
     //fprintf(logfile,"   |-Destination Port : %u\n",ntohs(tcph->dest));
     //fprintf(logfile,"   |-Sequence Number    : %u\n",ntohl(tcph->seq));
@@ -52,20 +52,20 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
     //fprintf(logfile,"   |-Window         : %d\n",ntohs(tcph->window));
     //fprintf(logfile,"   |-Checksum       : %d\n",ntohs(tcph->check));
     //fprintf(logfile,"   |-Urgent Pointer : %d\n",tcph->urg_ptr);
-    fprintf("\n");
-    fprintf("                        DATA Dump                         ");
-    fprintf("\n");
+    printf("\n");
+    printf("                        DATA Dump                         ");
+    printf("\n");
          
-    fprintf("IP Header\n");
+    printf("IP Header\n");
     PrintData(Buffer,iphdrlen);
          
-    fprintf("TCP Header\n");
+    printf("TCP Header\n");
     //PrintData(Buffer+iphdrlen,tcph->doff*4);
          
-    fprintf("Data Payload\n");  
+    printf("Data Payload\n");  
     //PrintData(Buffer + iphdrlen + tcph->doff*4 , (Size - tcph->doff*4-iph->ihl*4) );
                          
-    fprintf("\n###########################################################");
+    printf("\n###########################################################");
 }
 
 /**
@@ -139,21 +139,21 @@ void print_ip_header(unsigned char* Buffer, int Size)
     memset(&dest, 0, sizeof(dest));
     dest.sin_addr.s_addr = iph->daddr;
      
-    fprintf("\n");
-    fprintf("IP Header\n");
-    fprintf("   |-IP Version        : %d\n",(unsigned int)iph->version);
-    fprintf("   |-IP Header Length  : %d DWORDS or %d Bytes\n",(unsigned int)iph->ihl,((unsigned int)(iph->ihl))*4);
-    fprintf("   |-Type Of Service   : %d\n",(unsigned int)iph->tos);
-    fprintf("   |-IP Total Length   : %d  Bytes(Size of Packet)\n",ntohs(iph->tot_len));
-    fprintf("   |-Identification    : %d\n",ntohs(iph->id));
+    printf("\n");
+    printf("IP Header\n");
+    printf("   |-IP Version        : %d\n",(unsigned int)iph->version);
+    printf("   |-IP Header Length  : %d DWORDS or %d Bytes\n",(unsigned int)iph->ihl,((unsigned int)(iph->ihl))*4);
+    printf("   |-Type Of Service   : %d\n",(unsigned int)iph->tos);
+    printf("   |-IP Total Length   : %d  Bytes(Size of Packet)\n",ntohs(iph->tot_len));
+    printf("   |-Identification    : %d\n",ntohs(iph->id));
     //fprintf(logfile,"   |-Reserved ZERO Field   : %d\n",(unsigned int)iphdr->ip_reserved_zero);
     //fprintf(logfile,"   |-Dont Fragment Field   : %d\n",(unsigned int)iphdr->ip_dont_fragment);
     //fprintf(logfile,"   |-More Fragment Field   : %d\n",(unsigned int)iphdr->ip_more_fragment);
-    fprintf("   |-TTL      : %d\n",(unsigned int)iph->ttl);
-    fprintf("   |-Protocol : %d\n",(unsigned int)iph->protocol);
-    fprintf("   |-Checksum : %d\n",ntohs(iph->check));
-    fprintf("   |-Source IP        : %s\n",inet_ntoa(source.sin_addr));
-    fprintf("   |-Destination IP   : %s\n",inet_ntoa(dest.sin_addr));
+    printf("   |-TTL      : %d\n",(unsigned int)iph->ttl);
+    printf("   |-Protocol : %d\n",(unsigned int)iph->protocol);
+    printf("   |-Checksum : %d\n",ntohs(iph->check));
+    printf("   |-Source IP        : %s\n",inet_ntoa(source.sin_addr));
+    printf("   |-Destination IP   : %s\n",inet_ntoa(dest.sin_addr));
 }
 
 
@@ -167,35 +167,35 @@ void print_icmp_packet(unsigned char* Buffer , int Size)
      
     struct icmphdr *icmph = (struct icmphdr *)(Buffer + iphdrlen);
              
-    fprintf("\n\n***********************ICMP Packet*************************\n");   
+    printf("\n\n***********************ICMP Packet*************************\n");   
      
     print_ip_header(Buffer , Size);
              
-    fprintf("\n");
+    printf("\n");
          
-    fprintf("ICMP Header\n");
-    fprintf("   |-Type : %d",(unsigned int)(icmph->type));
+    printf("ICMP Header\n");
+    printf("   |-Type : %d",(unsigned int)(icmph->type));
              
     if((unsigned int)(icmph->type) == 11) 
-        fprintf("  (TTL Expired)\n");
+        printf("  (TTL Expired)\n");
     else if((unsigned int)(icmph->type) == ICMP_ECHOREPLY) 
-        fprintf("  (ICMP Echo Reply)\n");
-    fprintf("   |-Code : %d\n",(unsigned int)(icmph->code));
-    fprintf("   |-Checksum : %d\n",ntohs(icmph->checksum));
+        printf("  (ICMP Echo Reply)\n");
+    printf("   |-Code : %d\n",(unsigned int)(icmph->code));
+    printf("   |-Checksum : %d\n",ntohs(icmph->checksum));
     //fprintf(logfile,"   |-ID       : %d\n",ntohs(icmph->id));
     //fprintf(logfile,"   |-Sequence : %d\n",ntohs(icmph->sequence));
-    fprintf("\n");
+    printf("\n");
  
-    fprintf("IP Header\n");
+    printf("IP Header\n");
     PrintData(Buffer,iphdrlen);
          
-    fprintf("UDP Header\n");
+    printf("UDP Header\n");
     PrintData(Buffer + iphdrlen , sizeof icmph);
          
-    fprintf("Data Payload\n");  
+    printf("Data Payload\n");  
     PrintData(Buffer + iphdrlen + sizeof icmph , (Size - sizeof icmph - iph->ihl * 4));
      
-    fprintf("\n###########################################################");
+    printf("\n###########################################################");
 }
  
 void PrintData (unsigned char* data , int Size)
@@ -205,32 +205,32 @@ void PrintData (unsigned char* data , int Size)
     {
         if( i!=0 && i%16==0)   //if one line of hex printing is complete...
         {
-            fprintf("         ");
+            printf("         ");
             for(j=i-16 ; j<i ; j++)
             {
                 if(data[j]>=32 && data[j]<=128)
-                    fprintf("%c",(unsigned char)data[j]); //if its a number or alphabet
+                    printf("%c",(unsigned char)data[j]); //if its a number or alphabet
                  
-                else fprintf("."); //otherwise print a dot
+                else printf("."); //otherwise print a dot
             }
-            fprintf("\n");
+            printf("\n");
         } 
          
-        if(i%16==0) fprintf("   ");
-            fprintf(" %02X",(unsigned int)data[i]);
+        if(i%16==0) printf("   ");
+            printf(" %02X",(unsigned int)data[i]);
                  
         if( i==Size-1)  //print the last spaces
         {
-            for(j=0;j<15-i%16;j++) fprintf("   "); //extra spaces
+            for(j=0;j<15-i%16;j++) printf("   "); //extra spaces
              
-            fprintf("         ");
+            printf("         ");
              
             for(j=i-i%16 ; j<=i ; j++)
             {
-                if(data[j]>=32 && data[j]<=128) fprintf("%c",(unsigned char)data[j]);
-                else fprintf(".");
+                if(data[j]>=32 && data[j]<=128) printf("%c",(unsigned char)data[j]);
+                else printf(".");
             }
-            fprintf("\n");
+            printf("\n");
         }
     }
 }
