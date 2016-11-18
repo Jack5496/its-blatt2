@@ -73,7 +73,7 @@ void ProcessPacket(unsigned char* buffer, int size)
             break;
         case 6:  //TCP Protocol
             ++tcp;
-            //print_tcp_packet(buffer , size);
+            print_tcp_packet(buffer , size);
             break;
         default: //Some Other Protocol like ARP etc.
             ++others;
