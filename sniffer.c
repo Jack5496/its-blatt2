@@ -87,10 +87,10 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
 {
     unsigned short iphdrlen;
      
-    struct iphdr** iph     
+    struct iphdr** iph;     
     struct tcphdr** tcph;
  
-    int payload_amount = get_tcp_payload(Buffer,iph* ,tcph );
+    int payload_amount = get_tcp_payload(Buffer,iph ,tcph );
              
     fprintf(logfile,"\n\n***********************TCP Packet*************************\n");    
          
