@@ -64,7 +64,6 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
     //PrintData(Buffer+iphdrlen,tcph->doff*4);
          
     printf("Data Payload\n");  
-    get_tcp_payload(Buffer,iph,tcph){
     int header_len = 4*(tcp->doff + ip->ihl);
     PrintData(Buffer, (Size - header_len );
                          
