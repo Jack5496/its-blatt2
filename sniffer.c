@@ -48,7 +48,7 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
     printf("   |-Window         : %d\n",ntohs(tcph->window));
     printf("   |-Checksum       : %d\n",ntohs(tcph->check));
     printf("   |-Urgent Pointer : %d\n",tcph->urg_ptr);
-    printf(\n");
+    printf("\n");
     printf("                        DATA Dump                         ");
     printf("\n");
          
