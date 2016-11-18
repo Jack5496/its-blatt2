@@ -104,8 +104,11 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
     fprintf(logfile,"                        DATA Dump                         ");
     fprintf(logfile,"\n");
     
-    fprintf(logfile,"Data Payload %d | BufferSize: %d\n",strlen(data_payload),Size);  
-    fprintf(logfile,Buffer[data_payload],Size-data_payload);
+    char* end_pointer = Buffer+(Size*4);
+    int size_of_payload = (end_pointer-data_payload)/4;
+ 
+    fprintf(logfile,"Data Payload\n");  
+    fprintf(logfile,data_payload,size_of_payload);
     //PrintData(Buffer + iphdrlen + tcph->doff*4 , (Size - tcph->doff*4-iph->ihl*4) );
                          
     fprintf(logfile,"\n###########################################################");
