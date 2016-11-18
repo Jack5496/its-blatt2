@@ -1,0 +1,5 @@
+topic read #
+user beamer
+topic read /uos/93/E06/beamer-control
+user remote-control
+topic readwrite /uos/93/E06/beamer-control
