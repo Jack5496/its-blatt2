@@ -10,8 +10,6 @@
 void ProcessPacket(unsigned char* , int);
 void print_ip_header(unsigned char* , int);
 void print_tcp_packet(unsigned char* , int);
-void print_udp_packet(unsigned char * , int);
-void print_icmp_packet(unsigned char* , int);
 void PrintData (unsigned char* , int);
  
 int sock_raw;
@@ -61,30 +59,15 @@ void ProcessPacket(unsigned char* buffer, int size)
     ++total;
     switch (iph->protocol) //Check the Protocol and do accordingly...
     {
-        case 1:  //ICMP Protocol
-            ++icmp;
-            //PrintIcmpPacket(Buffer,Size);
-            break;
-         
-        case 2:  //IGMP Protocol
-            ++igmp;
-            break;
-         
         case 6:  //TCP Protocol
             ++tcp;
             print_tcp_packet(buffer , size);
             break;
-         
-        case 17: //UDP Protocol
-            ++udp;
-            print_udp_packet(buffer , size);
-            break;
-         
         default: //Some Other Protocol like ARP etc.
             ++others;
             break;
     }
-    printf("TCP : %d   UDP : %d   ICMP : %d   IGMP : %d   Others : %d   Total : %d\r",tcp,udp,icmp,igmp,others,total);
+    printf("TCP : %d  Others : %d   Total : %d\r",tcp,others,total);
 }
  
 void print_ip_header(unsigned char* Buffer, int Size)
@@ -161,79 +144,6 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
     fprintf(logfile,"Data Payload\n");  
     PrintData(Buffer + iphdrlen + tcph->doff*4 , (Size - tcph->doff*4-iph->ihl*4) );
                          
-    fprintf(logfile,"\n###########################################################");
-}
- 
-void print_udp_packet(unsigned char *Buffer , int Size)
-{
-     
-    unsigned short iphdrlen;
-     
-    struct iphdr *iph = (struct iphdr *)Buffer;
-    iphdrlen = iph->ihl*4;
-     
-    struct udphdr *udph = (struct udphdr*)(Buffer + iphdrlen);
-     
-    fprintf(logfile,"\n\n***********************UDP Packet*************************\n");
-     
-    print_ip_header(Buffer,Size);           
-     
-    fprintf(logfile,"\nUDP Header\n");
-    fprintf(logfile,"   |-Source Port      : %d\n" , ntohs(udph->source));
-    fprintf(logfile,"   |-Destination Port : %d\n" , ntohs(udph->dest));
-    fprintf(logfile,"   |-UDP Length       : %d\n" , ntohs(udph->len));
-    fprintf(logfile,"   |-UDP Checksum     : %d\n" , ntohs(udph->check));
-     
-    fprintf(logfile,"\n");
-    fprintf(logfile,"IP Header\n");
-    PrintData(Buffer , iphdrlen);
-         
-    fprintf(logfile,"UDP Header\n");
-    PrintData(Buffer+iphdrlen , sizeof udph);
-         
-    fprintf(logfile,"Data Payload\n");  
-    PrintData(Buffer + iphdrlen + sizeof udph ,( Size - sizeof udph - iph->ihl * 4 ));
-     
-    fprintf(logfile,"\n###########################################################");
-}
- 
-void print_icmp_packet(unsigned char* Buffer , int Size)
-{
-    unsigned short iphdrlen;
-     
-    struct iphdr *iph = (struct iphdr *)Buffer;
-    iphdrlen = iph->ihl*4;
-     
-    struct icmphdr *icmph = (struct icmphdr *)(Buffer + iphdrlen);
-             
-    fprintf(logfile,"\n\n***********************ICMP Packet*************************\n");   
-     
-    print_ip_header(Buffer , Size);
-             
-    fprintf(logfile,"\n");
-         
-    fprintf(logfile,"ICMP Header\n");
-    fprintf(logfile,"   |-Type : %d",(unsigned int)(icmph->type));
-             
-    if((unsigned int)(icmph->type) == 11) 
-        fprintf(logfile,"  (TTL Expired)\n");
-    else if((unsigned int)(icmph->type) == ICMP_ECHOREPLY) 
-        fprintf(logfile,"  (ICMP Echo Reply)\n");
-    fprintf(logfile,"   |-Code : %d\n",(unsigned int)(icmph->code));
-    fprintf(logfile,"   |-Checksum : %d\n",ntohs(icmph->checksum));
-    //fprintf(logfile,"   |-ID       : %d\n",ntohs(icmph->id));
-    //fprintf(logfile,"   |-Sequence : %d\n",ntohs(icmph->sequence));
-    fprintf(logfile,"\n");
- 
-    fprintf(logfile,"IP Header\n");
-    PrintData(Buffer,iphdrlen);
-         
-    fprintf(logfile,"UDP Header\n");
-    PrintData(Buffer + iphdrlen , sizeof icmph);
-         
-    fprintf(logfile,"Data Payload\n");  
-    PrintData(Buffer + iphdrlen + sizeof icmph , (Size - sizeof icmph - iph->ihl * 4));
-     
     fprintf(logfile,"\n###########################################################");
 }
  
