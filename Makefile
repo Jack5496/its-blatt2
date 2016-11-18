@@ -2,7 +2,7 @@
 CC = gcc
 
 #the build target
-TARGET = PA1
+TARGET = sniffer
 
 all: $(TARGET)
 
