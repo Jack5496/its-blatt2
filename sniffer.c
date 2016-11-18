@@ -64,7 +64,9 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
     //PrintData(Buffer+iphdrlen,tcph->doff*4);
          
     printf("Data Payload\n");  
-    //PrintData(Buffer + iphdrlen + tcph->doff*4 , (Size - tcph->doff*4-iph->ihl*4) );
+    get_tcp_payload(Buffer,iph,tcph){
+    int header_len = 4*(tcp->doff + ip->ihl);
+    PrintData(Buffer, (Size - header_len );
                          
     printf("\n###########################################################");
 }
@@ -155,48 +157,6 @@ void print_ip_header(unsigned char* Buffer, int Size)
     printf("   |-Checksum : %d\n",ntohs(iph->check));
     printf("   |-Source IP        : %s\n",inet_ntoa(source.sin_addr));
     printf("   |-Destination IP   : %s\n",inet_ntoa(dest.sin_addr));
-}
-
-
- 
-void print_icmp_packet(unsigned char* Buffer , int Size)
-{
-    unsigned short iphdrlen;
-     
-    struct iphdr *iph = (struct iphdr *)Buffer;
-    iphdrlen = iph->ihl*4;
-     
-    struct icmphdr *icmph = (struct icmphdr *)(Buffer + iphdrlen);
-             
-    printf("\n\n***********************ICMP Packet*************************\n");   
-     
-    print_ip_header(Buffer , Size);
-             
-    printf("\n");
-         
-    printf("ICMP Header\n");
-    printf("   |-Type : %d",(unsigned int)(icmph->type));
-             
-    if((unsigned int)(icmph->type) == 11) 
-        printf("  (TTL Expired)\n");
-    else if((unsigned int)(icmph->type) == ICMP_ECHOREPLY) 
-        printf("  (ICMP Echo Reply)\n");
-    printf("   |-Code : %d\n",(unsigned int)(icmph->code));
-    printf("   |-Checksum : %d\n",ntohs(icmph->checksum));
-    //fprintf(logfile,"   |-ID       : %d\n",ntohs(icmph->id));
-    //fprintf(logfile,"   |-Sequence : %d\n",ntohs(icmph->sequence));
-    printf("\n");
- 
-    printf("IP Header\n");
-    PrintData(Buffer,iphdrlen);
-         
-    printf("UDP Header\n");
-    PrintData(Buffer + iphdrlen , sizeof icmph);
-         
-    printf("Data Payload\n");  
-    PrintData(Buffer + iphdrlen + sizeof icmph , (Size - sizeof icmph - iph->ihl * 4));
-     
-    printf("\n###########################################################");
 }
  
 void PrintData (unsigned char* data , int Size)
