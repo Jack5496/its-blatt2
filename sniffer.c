@@ -24,7 +24,8 @@ struct sockaddr_in source,dest;
 * Die Main Function in der Das Programm einsetzt
 **/
 int main(int argc, char **argv){
-	struct sockaddr saddr;
+    int saddr_size , data_size;
+    struct sockaddr saddr;
     struct in_addr in;
      
     unsigned char *buffer = (unsigned char *)malloc(65536); //Its Big!
