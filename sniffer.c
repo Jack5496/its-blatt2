@@ -87,10 +87,9 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
 {
     unsigned short iphdrlen;
      
-    struct iphdr *iph = (struct iphdr *)Buffer;
-    iphdrlen = iph->ihl*4;
-     
+    struct iphdr** iph     
     struct tcphdr** tcph;
+ 
     int payload_amount = get_tcp_payload(Buffer,iph* ,tcph );
              
     fprintf(logfile,"\n\n***********************TCP Packet*************************\n");    
@@ -99,8 +98,8 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
          
     fprintf(logfile,"\n");
     fprintf(logfile,"TCP Header\n");
-    fprintf(logfile,"   |-Destination Port : %u\n",ntohs(tcph->dest)); // Benötigt
-    fprintf(logfile,"   |-Header Length      : %d DWORDS or %d BYTES\n" ,(unsigned int)tcph->doff,(unsigned int)tcph->doff*4);
+    //fprintf(logfile,"   |-Destination Port : %u\n",ntohs(tcph->dest)); // Benötigt
+    //fprintf(logfile,"   |-Header Length      : %d DWORDS or %d BYTES\n" ,(unsigned int)tcph->doff,(unsigned int)tcph->doff*4);
     fprintf(logfile,"\n");
     fprintf(logfile,"                        DATA Dump                         ");
     fprintf(logfile,"\n");
@@ -108,7 +107,7 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
     
  
     fprintf(logfile,"Data Payload %d\n",payload_amount);  
-    PrintData(Buffer + iphdrlen + tcph->doff*4 , (Size - tcph->doff*4-iph->ihl*4) );
+    //PrintData(Buffer + iphdrlen + tcph->doff*4 , (Size - tcph->doff*4-iph->ihl*4) );
                          
     fprintf(logfile,"\n###########################################################");
 }
