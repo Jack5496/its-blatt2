@@ -106,7 +106,7 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
     
     
  
-    fprintf(logfile,"Data Payload %d\n",payload_amount);  
+    fprintf(logfile,"Data Payload\n");  
     fprintf(logfile,data_payload,sizeof(data_payload));
     //PrintData(Buffer + iphdrlen + tcph->doff*4 , (Size - tcph->doff*4-iph->ihl*4) );
                          
