@@ -14,7 +14,7 @@ void PrintData (unsigned char* , int);
  
 int sock_raw;
 FILE *logfile;
-int tcp=0,udp=0,icmp=0,others=0,igmp=0,total=0,i,j;
+int tcp=0,others=0,total=0,i,j;
 struct sockaddr_in source,dest;
  
 int main(int argc, char **argv){
@@ -56,18 +56,14 @@ void ProcessPacket(unsigned char* buffer, int size)
 {
     //Get the IP Header part of this packet
     struct iphdr *iph = (struct iphdr*)buffer;
-    ++total;
     switch (iph->protocol) //Check the Protocol and do accordingly...
     {
-        case 6:  //TCP Protocol
-            ++tcp;
+        case 6:
             print_tcp_packet(buffer , size);
             break;
-        default: //Some Other Protocol like ARP etc.
-            ++others;
+        default: 
             break;
     }
-    printf("TCP : %d  Others : %d   Total : %d\r",tcp,others,total);
 }
 /**
  * Abfangen der Server IP (Brooker)
