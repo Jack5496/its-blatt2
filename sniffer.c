@@ -1,7 +1,6 @@
 #include<stdio.h> //For standard things
 #include<stdlib.h>    //malloc
 #include<string.h>    //memset
-#include<netinet/ip.h>    //Provides declarations for ip header
 #include<sys/socket.h>
 #include<arpa/inet.h>
 #include <fcntl.h> // for open
