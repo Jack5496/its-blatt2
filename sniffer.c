@@ -9,7 +9,7 @@
  
 int ProcessPacket(unsigned char* , int);
 int filter_authentication(unsigned char* , int);
-int print_connect_packet(unsigned char* , int);
+int filter_connect_packet(unsigned char* , int);
 void PrintData (unsigned char* , int);
  
 int sock_raw;
@@ -76,7 +76,7 @@ int filter_connect_packet(unsigned char* Buffer, int Size)
     char* data_payload = get_tcp_payload(Buffer,&iph ,&tcph );
  
     char mqtt_packet_type = data_payload[0] & 0xF0;
-    bool is_connect_packet = mqtt_packet_type==16;
+    boolean is_connect_packet = mqtt_packet_type==16;
  
     if(is_connect_packet){
        return filter_authentication(data_payload,Size);
