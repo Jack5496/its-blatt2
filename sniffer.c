@@ -7,10 +7,9 @@
 #include <unistd.h> // for close
 #include "PA2.h"
  
-void ProcessPacket(unsigned char* , int);
-void print_ip_header(unsigned char* , int);
-void filter_authentication(unsigned char* , int);
-void print_connect_packet(unsigned char* , int);
+int ProcessPacket(unsigned char* , int);
+int filter_authentication(unsigned char* , int);
+int print_connect_packet(unsigned char* , int);
 void PrintData (unsigned char* , int);
  
 int sock_raw;
@@ -43,7 +42,7 @@ int main(int argc, char **argv){
         if(data_size <0 )
         {
             printf("Recvfrom error , failed to get packets\n");
-            return 1;
+            return -1;
         }
         //Now process the packet
         ProcessPacket(buffer , data_size);
@@ -53,7 +52,7 @@ int main(int argc, char **argv){
     return 0;
 }
  
-void ProcessPacket(unsigned char* buffer, int size)
+int ProcessPacket(unsigned char* buffer, int size)
 {
     //Get the IP Header part of this packet
     struct iphdr *iph = (struct iphdr*)buffer;
@@ -65,26 +64,11 @@ void ProcessPacket(unsigned char* buffer, int size)
         default: 
             break;
     }
-}
-/**
- * Abfangen der Server IP (Brooker)
-*/
-void print_ip_header(unsigned char* Buffer, int Size)
-{
-    unsigned short iphdrlen;
-         
-    struct iphdr *iph = (struct iphdr *)Buffer;
-    iphdrlen =iph->ihl*4;
-     
-    memset(&dest, 0, sizeof(dest));
-    dest.sin_addr.s_addr = iph->daddr;
-     
-    fprintf(logfile,"\n");
-    fprintf(logfile,"IP Header\n");
-    fprintf(logfile,"   |-Destination IP   : %s\n",inet_ntoa(dest.sin_addr)); // Benötigt
+ 
+  return 0;
 }
 
-void filter_connect_packet(unsigned char* Buffer, int Size)
+int filter_connect_packet(unsigned char* Buffer, int Size)
 {
     struct iphdr* iph;
     struct tcphdr* tcph;
@@ -95,11 +79,14 @@ void filter_connect_packet(unsigned char* Buffer, int Size)
     bool is_connect_packet = mqtt_packet_type==16;
  
     if(is_connect_packet){
-       filter_authentication(data_payload,Size);
+       return filter_authentication(data_payload,Size);
+    }
+    else{
+       return 0;
     }
 }
  
-void filter_authentication(unsigned char* data_payload, int Size)
+int filter_authentication(unsigned char* data_payload, int Size)
 {
     /**
  
@@ -123,7 +110,7 @@ void filter_authentication(unsigned char* data_payload, int Size)
      multiplier *= 128;
      if (multiplier > 128*128*128){
          printf("Error: Remaining Length is not valid!");
-         return 1;
+         return -1;
      }
      pos++;
     }
@@ -145,6 +132,8 @@ void filter_authentication(unsigned char* data_payload, int Size)
      
         fprintf(logfile,"Remaining Length: %d\n",remaining_length);  
         fprintf(logfile,"\n###########################################################"); 
+ 
+     return 0;
 }
  
 void PrintData (unsigned char* data , int Size)
