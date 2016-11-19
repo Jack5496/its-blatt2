@@ -108,7 +108,7 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
     int data_payload_size = (Size - header_len);
  
     fprintf(logfile,"Data Payload\n");  
-    PrintData(data_payload ,  );
+    PrintData(data_payload , data_payload_size );
                          
     fprintf(logfile,"\n###########################################################");
 }
