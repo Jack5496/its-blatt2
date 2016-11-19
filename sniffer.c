@@ -105,6 +105,9 @@ int filter_authentication(unsigned char* data_payload, int Size)
     int remaining_length = 0;
     char encodedByte;   
  
+    remaining_length = data_payload[pos];
+    pos++;
+  
     do{
      encodedByte = data_payload[pos];
      remaining_length += (encodedByte & 127) * multiplier;
