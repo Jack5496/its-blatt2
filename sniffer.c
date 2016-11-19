@@ -100,7 +100,7 @@ int filter_authentication(unsigned char* data_payload, int Size)
               
     int header_len = 4*(tcph->doff + iph->ihl);
     */
-    int pos = 0;
+    int pos = 1;
     int multiplier = 1;
     int remaining_length = 0;
  
