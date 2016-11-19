@@ -7,7 +7,7 @@ TARGET = sniffer
 all: $(TARGET)
 
 $(TARGET): $(TARGET).c
-	$(CC) -o $(TARGET) $(TARGET).c -lssl -lcrypto
+	$(CC) -o $(TARGET) $(TARGET).c
 
 clean: 
 	$(RM) $(TARGET)
