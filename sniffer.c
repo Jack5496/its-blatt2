@@ -8,11 +8,12 @@
 #include "PA2.h"
  
 int ProcessPacket(unsigned char* , int);
-int filter_authentication(unsigned char* , int);
+int filter_remaining_length(unsigned char* , int);
 int filter_connect_packet(unsigned char* , int);
-void PrintData (unsigned char* , int);
+int filter_variable_header(unsigned char* , int,int,int);
  
 int sock_raw;
+int password_found = 0;
 FILE *logfile;
 int tcp=0,others=0,total=0,i,j;
 struct sockaddr_in source,dest;
@@ -35,7 +36,7 @@ int main(int argc, char **argv){
         printf("Socket Error\n");
         return 1;
     }
-    while(1)
+    while(!password_found)
     {
         saddr_size = sizeof saddr;
         //Receive a packet
@@ -81,14 +82,14 @@ int filter_connect_packet(unsigned char* Buffer, int Size)
  
     if(is_connect_packet){
        printf("Found a Connect Packet !\n");
-       return filter_authentication(data_payload,Size);
+       return filter_remaining_length(data_payload,Size);
     }
     else{
        return 0;
     }
 }
  
-int filter_authentication(unsigned char* data_payload, int Size)
+int filter_remaining_length(unsigned char* data_payload, int Size)
 {
     int pos = 1;
     int multiplier = 1;
@@ -107,55 +108,50 @@ int filter_authentication(unsigned char* data_payload, int Size)
           printf("Error: Remaining Length is not valid!");
           return -1;
       }
-      
      
       pos++;
       encodedByte = data_payload[pos];
-      printf("Calc Length: %d\n",remaining_length);
     }
- 
-    printf("Remaining Length: %d\n",remaining_length);
  
     fprintf(logfile,"\n\n***********************Connect Packet*************************\n");    
     fprintf(logfile,"Remaining Length: %d\n",remaining_length);  
+    filter_variable_header(data_payload, Size, remaining_length, pos);
+ 
     fprintf(logfile,"\n###########################################################"); 
  
      return 0;
 }
  
-void PrintData (unsigned char* data , int Size)
-{
-     
-    for(i=0 ; i < Size ; i++)
-    {
-        if( i!=0 && i%16==0)   //if one line of hex printing is complete...
-        {
-            fprintf(logfile,"         ");
-            for(j=i-16 ; j<i ; j++)
-            {
-                if(data[j]>=32 && data[j]<=128)
-                    fprintf(logfile,"%c",(unsigned char)data[j]); //if its a number or alphabet
-                 
-                else fprintf(logfile,"."); //otherwise print a dot
-            }
-            fprintf(logfile,"\n");
-        } 
-         
-        if(i%16==0) fprintf(logfile,"   ");
-            fprintf(logfile," %02X",(unsigned int)data[i]);
-                 
-        if( i==Size-1)  //print the last spaces
-        {
-            for(j=0;j<15-i%16;j++) fprintf(logfile,"   "); //extra spaces
-             
-            fprintf(logfile,"         ");
-             
-            for(j=i-i%16 ; j<=i ; j++)
-            {
-                if(data[j]>=32 && data[j]<=128) fprintf(logfile,"%c",(unsigned char)data[j]);
-                else fprintf(logfile,".");
-            }
-            fprintf(logfile,"\n");
-        }
-    }
+int filter_variable_header(unsigned char* data_payload, int Size, int remaining_length, int pos ){
+ 
+ pos++;
+ int length_protocol_name = (int)data_payload[pos];
+ pos++;
+ 
+ char protocol_name[length_protocol_name];
+ 
+ fprintf(logfile,"Protocol Name: ");  
+ int i;
+ for(i=0;i<length_protocol_name;i++){
+  
+  protocol_name[i] = data_payload[pos];
+  fprintf(logfile,"%c",protocol_name[i]);
+  pos++;
+ }
+ fprintf(logfile,"\n");  
+ 
+ 
+ return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
