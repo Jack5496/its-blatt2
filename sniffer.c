@@ -10,7 +10,8 @@
 int ProcessPacket(unsigned char* , int);
 int filter_remaining_length(unsigned char* , int);
 int filter_connect_packet(unsigned char* , int);
-int filter_variable_header(unsigned char* , int,int,int);
+int filter_protocol_name(unsigned char* , int,int,int);
+int filter_connect_flags(unsigned char* , int,int,int);
  
 int sock_raw;
 int password_found = 0;
@@ -115,14 +116,14 @@ int filter_remaining_length(unsigned char* data_payload, int Size)
  
     fprintf(logfile,"\n\n***********************Connect Packet*************************\n");    
     fprintf(logfile,"Remaining Length: %d\n",remaining_length);  
-    filter_variable_header(data_payload, Size, remaining_length, pos);
+    filter_protocol_name(data_payload, Size, remaining_length, pos);
  
     fprintf(logfile,"\n###########################################################"); 
  
      return 0;
 }
  
-int filter_variable_header(unsigned char* data_payload, int Size, int remaining_length, int pos ){
+int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
  
  pos++;
  int length_protocol_name = (int)data_payload[pos];
@@ -140,10 +141,33 @@ int filter_variable_header(unsigned char* data_payload, int Size, int remaining_
  }
  fprintf(logfile,"\n");  
  
+ int is_mqtt = strcmp(protocol_name,"MQTT");
+ int is_mqisdp = strcmp(protocol_name,"MQIsdp");
+ 
+ if(is_mqtt || is_mqisdp){
+  pos++; // skip Protocol Level
+  filter_connect_flags(data_payload, Size, remaining_length, pos);
+ }
+ 
  
  return 0;
 }
 
+
+int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_length, int pos ){
+ //pos stands now on connect flags
+ fprintf(logfile,"Connect Flags: \n");
+ 
+ int is_user_name_flag = data_payload[pos] && 0x80;
+ int is_password_flag = data_payload[pos] && 0x40;
+ 
+ fprintf(logfile,"-- User Name Flag: %d\n",is_user_name_flag);
+ fprintf(logfile,"-- Password Flag: %d\n",is_password_flag);
+ 
+ 
+ 
+ 
+}
 
 
 
