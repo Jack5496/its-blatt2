@@ -9,7 +9,8 @@
  
 void ProcessPacket(unsigned char* , int);
 void print_ip_header(unsigned char* , int);
-void print_tcp_packet(unsigned char* , int);
+void filter_authentication(unsigned char* , int);
+void print_connect_packet(unsigned char* , int);
 void PrintData (unsigned char* , int);
  
 int sock_raw;
@@ -59,7 +60,7 @@ void ProcessPacket(unsigned char* buffer, int size)
     switch (iph->protocol) //Check the Protocol and do accordingly...
     {
         case 6:
-            print_tcp_packet(buffer , size);
+            filter_connect_packet(buffer , size);
             break;
         default: 
             break;
@@ -82,9 +83,26 @@ void print_ip_header(unsigned char* Buffer, int Size)
     fprintf(logfile,"IP Header\n");
     fprintf(logfile,"   |-Destination IP   : %s\n",inet_ntoa(dest.sin_addr)); // Benötigt
 }
- 
-void print_tcp_packet(unsigned char* Buffer, int Size)
+
+void filter_connect_packet(unsigned char* Buffer, int Size)
 {
+    struct iphdr* iph;
+    struct tcphdr* tcph;
+ 
+    char* data_payload = get_tcp_payload(Buffer,&iph ,&tcph );
+ 
+    char mqtt_packet_type = data_payload[0] & 0xF0;
+    bool is_connect_packet = mqtt_packet_type==16;
+ 
+    if(is_connect_packet){
+       filter_authentication(data_payload,Size);
+    }
+}
+ 
+void filter_authentication(unsigned char* data_payload, int Size)
+{
+    /**
+ 
     unsigned short iphdrlen;
      
     struct iphdr* iph;
@@ -93,11 +111,26 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
     char* data_payload = get_tcp_payload(Buffer,&iph ,&tcph );
               
     int header_len = 4*(tcph->doff + iph->ihl);
-    int data_payload_size = (Size - header_len);
+    */
+    int pos = 0;
+    int multiplier = 1;
+    int remaining_length = 0;
+    char encodedByte;   
  
-    if(data_payload_size>0){
-        fprintf(logfile,"\n\n***********************TCP Packet*************************\n");    
-
+    do{
+     encodedByte = data_payload[pos];
+     remaining_length += (encodedByte & 127) * multiplier;
+     multiplier *= 128;
+     if (multiplier > 128*128*128){
+         printf("Error: Remaining Length is not valid!");
+         return 1;
+     }
+     pos++;
+    }
+    while((encodedByte & 128) != 0);
+ 
+        fprintf(logfile,"\n\n***********************Connect Packet*************************\n");    
+        /**
         print_ip_header(Buffer,Size);
 
         fprintf(logfile,"\n");
@@ -107,10 +140,11 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
         fprintf(logfile,"\n");
         fprintf(logfile,"                        DATA Dump                         ");
         fprintf(logfile,"\n");
-        fprintf(logfile,"Data Payload\n");  
-        PrintData(data_payload , data_payload_size );
-        fprintf(logfile,"\n###########################################################");
-    } 
+        
+        */
+     
+        fprintf(logfile,"Remaining Length: %d\n",remaining_length);  
+        fprintf(logfile,"\n###########################################################"); 
 }
  
 void PrintData (unsigned char* data , int Size)
