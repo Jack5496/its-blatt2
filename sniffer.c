@@ -103,23 +103,26 @@ int filter_authentication(unsigned char* data_payload, int Size)
     int pos = 0;
     int multiplier = 1;
     int remaining_length = 0;
-    char encodedByte;   
  
     remaining_length = data_payload[pos];
+    
+ 
     pos++;
-  
-    do{
-     encodedByte = data_payload[pos];
-     remaining_length += (encodedByte & 127) * multiplier;
-     multiplier *= 128;
-     if (multiplier > 128*128*128){
-         printf("Error: Remaining Length is not valid!");
-         return -1;
-     }
-     pos++;
-     printf("Calc Length: %d\n",remaining_length);
+    char encodedByte = data_payload[pos];
+   
+    while((encodedByte & 128) != 0){
+      remaining_length += (encodedByte & 127) * multiplier;
+      multiplier *= 128;
+      if (multiplier > 128*128*128){
+          printf("Error: Remaining Length is not valid!");
+          return -1;
+      }
+      
+     
+      pos++;
+      encodedByte = data_payload[pos];
+      printf("Calc Length: %d\n",remaining_length);
     }
-    while((encodedByte & 128) != 0);
  
     printf("Remaining Length: %d\n",remaining_length);
  
