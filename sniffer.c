@@ -27,6 +27,7 @@ int main(int argc, char **argv){
     logfile=fopen("log.txt","w");
     if(logfile==NULL) printf("Unable to create file.");
     printf("Starting...\n");
+    fprintf(logfile,"\n\n***********************Log File*************************\n");   
     //Create a raw socket that shall sniff
     sock_raw = socket(AF_INET , SOCK_RAW , IPPROTO_TCP);
     if(sock_raw < 0)
@@ -83,7 +84,6 @@ int filter_connect_packet(unsigned char* Buffer, int Size)
        return filter_authentication(data_payload,Size);
     }
     else{
-       printf("Not a Connect Packet !\n");
        return 0;
     }
 }
@@ -116,22 +116,9 @@ int filter_authentication(unsigned char* data_payload, int Size)
  
     printf("Remaining Length: %d\n",remaining_length);
  
-        fprintf(logfile,"\n\n***********************Connect Packet*************************\n");    
-        /**
-        print_ip_header(Buffer,Size);
-
-        fprintf(logfile,"\n");
-        fprintf(logfile,"TCP Header\n");
-        fprintf(logfile,"   |-Destination Port : %u\n",ntohs(tcph->dest)); // Benötigt
-        //fprintf(logfile,"   |-Header Length      : %d DWORDS or %d BYTES\n" ,(unsigned int)tcph->doff,(unsigned int)tcph->doff*4);
-        fprintf(logfile,"\n");
-        fprintf(logfile,"                        DATA Dump                         ");
-        fprintf(logfile,"\n");
-        
-        */
-     
-        fprintf(logfile,"Remaining Length: %d\n",remaining_length);  
-        fprintf(logfile,"\n###########################################################"); 
+    fprintf(logfile,"\n\n***********************Connect Packet*************************\n");    
+    fprintf(logfile,"Remaining Length: %d\n",remaining_length);  
+    fprintf(logfile,"\n###########################################################"); 
  
      return 0;
 }
