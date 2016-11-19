@@ -12,6 +12,9 @@ int filter_remaining_length(unsigned char* , int);
 int filter_connect_packet(unsigned char* , int);
 int filter_protocol_name(unsigned char* , int,int,int);
 int filter_connect_flags(unsigned char* , int,int,int);
+int filter_user_name(unsigned char* , int,int,int);
+int filter_password(unsigned char* , int,int,int);
+int get_field(unsigned char* , char[], int);
  
 int sock_raw;
 int password_found = 0;
@@ -122,10 +125,29 @@ int filter_remaining_length(unsigned char* data_payload, int Size)
  
      return 0;
 }
+
+int get_field(unsigned char* data_payload, char field[], int pos){
+ int old_pos = pos;
+ 
+ pos++; // skip MSB
+ int length_field = (int)data_payload[pos];
+ pos++;
+ 
+ char field[length_field];
+ 
+ int i;
+ for(i=0;i<length_field;i++){
+  field[i] = data_payload[pos];
+  fprintf(logfile,"%c",field[i]);
+  pos++;
+ }
+ 
+ return 0;
+}
  
 int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
- 
- pos++;
+ /**
+ pos++; // skip MSB
  int length_protocol_name = (int)data_payload[pos];
  pos++;
  
@@ -139,6 +161,13 @@ int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_le
   fprintf(logfile,"%c",protocol_name[i]);
   pos++;
  }
+ 
+ */
+ fprintf(logfile,"Protocol Name: ");  
+ char protocol_name[];
+ get_field(data_payload,protocol_name,pos);
+ 
+ 
  fprintf(logfile,"\n");  
  
  int is_mqtt = strcmp(protocol_name,"MQTT");
@@ -164,8 +193,26 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  fprintf(logfile,"-- User Name Flag: %d\n",is_user_name_flag);
  fprintf(logfile,"-- Password Flag: %d\n",is_password_flag);
  
+ pos++; //skip keep alive MSB
+ pos++; //skip keep alive LSB
  
+ //pos stands now on MSB of next Flag whatever this is
  
+ if(is_user_name_flag){
+  filter_user_name(data_payload, Size, remaining_length, pos);
+ }
+ if(is_password_flag){
+  filter_password(data_payload, Size, remaining_length, pos);
+ }
+ 
+ return 0;
+}
+
+int filter_user_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
+ 
+}
+
+int filter_password(unsigned char* data_payload, int Size, int remaining_length, int pos ){
  
 }
 
