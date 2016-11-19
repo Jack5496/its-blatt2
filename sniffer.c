@@ -83,23 +83,13 @@ int filter_connect_packet(unsigned char* Buffer, int Size)
        return filter_authentication(data_payload,Size);
     }
     else{
+       printf("Not a Connect Packet !\n");
        return 0;
     }
 }
  
 int filter_authentication(unsigned char* data_payload, int Size)
 {
-    /**
- 
-    unsigned short iphdrlen;
-     
-    struct iphdr* iph;
-    struct tcphdr* tcph;
- 
-    char* data_payload = get_tcp_payload(Buffer,&iph ,&tcph );
-              
-    int header_len = 4*(tcph->doff + iph->ihl);
-    */
     int pos = 1;
     int multiplier = 1;
     int remaining_length = 0;
