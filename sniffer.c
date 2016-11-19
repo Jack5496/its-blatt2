@@ -79,7 +79,7 @@ int filter_connect_packet(unsigned char* Buffer, int Size)
     int is_connect_packet = mqtt_packet_type==16;
  
     if(is_connect_packet){
-       printf("Found a Connect Packer !\n");
+       printf("Found a Connect Packet !\n");
        return filter_authentication(data_payload,Size);
     }
     else{
@@ -114,10 +114,11 @@ int filter_authentication(unsigned char* data_payload, int Size)
          return -1;
      }
      pos++;
+     printf("Calc Length: %d\n",remaining_length);
     }
     while((encodedByte & 128) != 0);
  
-    printf("Remaining Length: %d",remaining_length);
+    printf("Remaining Length: %d\n",remaining_length);
  
         fprintf(logfile,"\n\n***********************Connect Packet*************************\n");    
         /**
