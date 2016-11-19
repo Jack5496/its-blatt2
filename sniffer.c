@@ -14,7 +14,7 @@ int filter_protocol_name(unsigned char* , int,int,int);
 int filter_connect_flags(unsigned char* , int,int,int);
 int filter_user_name(unsigned char* , int,int,int);
 int filter_password(unsigned char* , int,int,int);
-int get_field(unsigned char* , char[], int);
+int get_field(unsigned char*, char**, int);
  
 int sock_raw;
 int password_found = 0;
@@ -126,14 +126,14 @@ int filter_remaining_length(unsigned char* data_payload, int Size)
      return 0;
 }
 
-int get_field(unsigned char* data_payload, char field[], int pos){
+int get_field(unsigned char* data_payload, char** field, int pos){
  int old_pos = pos;
  
  pos++; // skip MSB
  int length_field = (int)data_payload[pos];
  pos++;
  
- char field[length_field];
+ field = malloc(sizeof(char)*length_field);
  
  int i;
  for(i=0;i<length_field;i++){
@@ -164,7 +164,7 @@ int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_le
  
  */
  fprintf(logfile,"Protocol Name: ");  
- char protocol_name[];
+ char* protocol_name;
  get_field(data_payload,protocol_name,pos);
  
  
