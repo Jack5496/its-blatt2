@@ -7,15 +7,15 @@
 #include <unistd.h> // for close
 #include "PA2.h"
  
-int forward_packet(unsigned char* , int); 
-int filter_remaining_length(unsigned char* , int);
-int filter_connect_packet(unsigned char* , int);
-int filter_protocol_name(unsigned char* , int,int,int);
-int filter_connect_flags(unsigned char* , int,int,int);
-int filter_client_identifier(unsigned char* , int,int,int);
-int filter_user_name(unsigned char* , int,int,int);
-int filter_password(unsigned char* , int,int,int);
-int get_field(unsigned char*, char*, int);
+int forward_packet(char* , int); 
+int filter_remaining_length(char* , int);
+int filter_connect_packet(char* , int);
+int filter_protocol_name(char* , int,int,int);
+int filter_connect_flags(char* , int,int,int);
+int filter_client_identifier(char* , int,int,int);
+int filter_user_name(char* , int,int,int);
+int filter_password(char* , int,int,int);
+int get_field(char*, char*, int);
  
 int sock_raw; // erstelle unseren socket den Wir brauchen
 unsigned char buffer[65536];
