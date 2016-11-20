@@ -56,8 +56,8 @@ int main(int argc, char **argv){
     while(!password_found)
     {
         if(flag){ // my action when signal set it 1
-         printf("\n Signal caught!\n");
-         printf("\n default action it not termination!\n");
+         printf("\n Signal caught to Terminate!\n");
+         printf("\n Let me free some Buffers!\n");
          flag = 0;
          password_found = 1;
         }     
@@ -73,11 +73,13 @@ int main(int argc, char **argv){
         forward_packet(buffer , data_size);
     }
  
+    printf("Closing Socket!\n");
     close(sock_raw);
+    printf("Freeing Buffer!\n");
     free(buffer);
      
      
-    printf("Finished");
+    printf("Finished\n");
     return 0;
 }
  
