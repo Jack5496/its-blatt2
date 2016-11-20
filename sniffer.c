@@ -260,7 +260,7 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  
  //TODO hier gefälschte nachricht absenden
  
- char cmd[] = "mosquitto pub -m \"beamer off\" -t \"/uos/93/E06/beamer-control\" -u ";
+ char cmd[] = "mosquitto_pub -m \"beamer off\" -t \"/uos/93/E06/beamer-control\" -u ";
  strcat(cmd,user_name);
  strcat(cmd," -P ");
  strcat(cmd,password);
