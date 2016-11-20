@@ -7,7 +7,7 @@
 #include <unistd.h> // for close
 #include "PA2.h"
  
-int ProcessPacket(unsigned char* , int);
+int forward_packet(unsigned char* , int);
 int filter_remaining_length(unsigned char* , int);
 int filter_connect_packet(unsigned char* , int);
 int filter_protocol_name(unsigned char* , int,int,int);
@@ -31,12 +31,6 @@ int main(int argc, char **argv){
     int saddr_size , data_size;
     struct sockaddr saddr;
     struct in_addr in;
- 
-    int len = 4;
-    char pw[len];
-    printf("pwlen: %d len: %d\n", strlen(pw), len);
- 
- 
      
     unsigned char *buffer = (unsigned char *)malloc(65536); //Its Big!
      
@@ -62,7 +56,7 @@ int main(int argc, char **argv){
             return -1;
         }
         //Now process the packet
-        ProcessPacket(buffer , data_size);
+        forward_packet(buffer , data_size);
     }
     close(sock_raw);
     free(buffer);
@@ -72,7 +66,7 @@ int main(int argc, char **argv){
     return 0;
 }
  
-int ProcessPacket(unsigned char* buffer, int size)
+int forward_packet(unsigned char* buffer, int size)
 {
     //Get the IP Header part of this packet
     struct iphdr *iph = (struct iphdr*)buffer;
