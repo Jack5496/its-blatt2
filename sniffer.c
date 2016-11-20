@@ -173,7 +173,7 @@ int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_le
 
 int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_length, int pos ){
  //pos stands now on connect flags
- fprintf(logfile,"Connect Flags: \n");
+ fprintf(logfile,"Connect Flags: %d\n",data_payload[pos]);
  
  int is_user_name_flag = data_payload[pos] && 0x80;
  int is_password_flag = data_payload[pos] && 0x40;
@@ -181,9 +181,10 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  fprintf(logfile,"-- User Name Flag: %d\n",is_user_name_flag);
  fprintf(logfile,"-- Password Flag: %d\n",is_password_flag);
  
- fprintf(logfile,"Keep Alive MSP : %d\n",(int)data_payload[pos]);  
+ pos++;
+ fprintf(logfile,"Keep Alive MSP : %d\n",data_payload[pos]);  
  pos++; //skip keep alive MSB
- fprintf(logfile,"Keep Alive LSB : %d\n",(int)data_payload[pos]);  
+ fprintf(logfile,"Keep Alive LSB : %d\n",data_payload[pos]);  
  pos++; //skip keep alive LSB
  
  //pos stands now on MSB of next Flag whatever this is
