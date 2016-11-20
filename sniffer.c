@@ -6,8 +6,9 @@
 #include <fcntl.h> // for open
 #include <unistd.h> // for close
 #include "PA2.h"
+#include <signal.h> //  um ein strg + c zu registrieren
  
-int forward_packet(char[] , int); 
+int forward_packet(unsigned char* , int); 
 int filter_remaining_length(unsigned char* , int);
 int filter_connect_packet(unsigned char* , int);
 int filter_protocol_name(unsigned char* , int,int,int);
@@ -25,14 +26,21 @@ int tcp=0,others=0,total=0,i,j;
 char* user_name; //Saved Username
 char* password;  //Saved Password
 
+volatile sig_atomic_t flag = 0;
+void my_function(int sig){ // damit unser break erkannt wird
+  flag = 1; // setzen wir unsere Flag
+}
+
 struct sockaddr_in source,dest; //erstelle Sockadress
  
 int main(int argc, char **argv){ 
+    signal(SIGINT, my_function); 
+ 
     int saddr_size , data_size;
     struct sockaddr saddr;
     struct in_addr in;
      
-    char buffer[65536]; //Mach erstmal genug Platz Bro!
+    unsigned char *buffer = (unsigned char *)malloc(65536); //Its Big!
      
     logfile=fopen("log.txt","w");
     if(logfile==NULL) printf("Unable to create file.");
@@ -45,11 +53,11 @@ int main(int argc, char **argv){
         printf("Socket Error\n");
         return 1;
     }
-    while(!password_found)
+    while(!flag)
     {
         saddr_size = sizeof saddr;
         //Receive a packet
-        data_size = recvfrom(sock_raw ,*buffer , 65536 , 0 , &saddr , &saddr_size);
+        data_size = recvfrom(sock_raw , buffer , 65536 , 0 , &saddr , &saddr_size);
         if(data_size <0 )
         {
             printf("Recvfrom error , failed to get packets\n");
@@ -69,7 +77,7 @@ int main(int argc, char **argv){
 /**
 * Erhählt das gesammte Packet und filtert zunächst das TCP Packet raus
 */
-int forward_packet(char* buffer, int size)
+int forward_packet(unsigned char* buffer, int size)
 {
     //Get the IP Header part of this packet
     struct iphdr *iph = (struct iphdr*)buffer;
@@ -267,7 +275,7 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  printf("Running Command: %s\n",cmd);
  system(cmd);
  printf("\n\n");
- 
+ password_found = 1; //beende die Main Schleife
  
  //Wir brauchen diese nun nicht mehr
  free(user_name);
