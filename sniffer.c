@@ -133,14 +133,16 @@ int get_field(unsigned char* data_payload, char** field, int pos){
  int length_field = (int)data_payload[pos];
  pos++;
  
- *field = malloc(sizeof(char)*length_field);
+ char* temp = malloc(sizeof(char)*length_field);
  
  int i;
  for(i=0;i<length_field;i++){
-  *field[i] = data_payload[pos];
-  fprintf(logfile,"%c",*field[i]);
+  temp[i] = data_payload[pos];
+  fprintf(logfile,"%c",temp[i]);
   pos++;
  }
+ 
+ *field = temp;
  
  return 0;
 }
