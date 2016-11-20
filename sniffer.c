@@ -44,7 +44,7 @@ int main(int argc, char **argv){
     struct sockaddr saddr;
     struct in_addr in;
      
-    &buffer = (unsigned char *)malloc(65536); //Its Big!
+    buffer = (unsigned char *)malloc(65536); //Its Big!
      
     logfile=fopen("log.txt","w");
     if(logfile==NULL) printf("Unable to create file.");
@@ -56,25 +56,6 @@ int main(int argc, char **argv){
     {
         printf("Socket Error\n");
         return 1;
-    }
-    while(!password_found)
-    {
-        if(flag){ // my action when signal set it 1
-         printf("\n Signal caught to Terminate!\n");
-         printf("\n Let me free some Buffers!\n");
-         flag = 0;
-         password_found = 1;
-        }     
-        saddr_size = sizeof saddr;
-        //Receive a packet
-        data_size = recvfrom(sock_raw , buffer , 65536 , 0 , &saddr , &saddr_size);
-        if(data_size <0 )
-        {
-            printf("Recvfrom error , failed to get packets\n");
-            return -1;
-        }
-        //Now process the packet
-        forward_packet(buffer , data_size);
     }
  
     printf("Closing Socket!\n");
