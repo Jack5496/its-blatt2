@@ -52,9 +52,7 @@ int main(int argc, char **argv){
         saddr_size = sizeof saddr;
         //Receive a packet
         data_size = 0;
-        if(!flag){
         data_size = recvfrom(sock_raw , buffer , 65536 , 0 , &saddr , &saddr_size);
-        }
      
          if(data_size <0 )
         {
