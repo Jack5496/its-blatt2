@@ -17,18 +17,17 @@ int filter_user_name(unsigned char* , int,int,int);
 int filter_password(unsigned char* , int,int,int);
 int get_field(unsigned char*, char**, int);
  
-int sock_raw;
-int password_found = 0;
-FILE *logfile;
+int sock_raw; // erstelle unseren socket den Wir brauchen
+int password_found = 0; // boolean ob wir ein passendes Passwort gefunden haben
+FILE *logfile; // logfile für ausgaben
 int tcp=0,others=0,total=0,i,j;
 
-char* user_name;
-char* password;
+char* user_name; //Saved Username
+char* password;  //Saved Password
 
-struct sockaddr_in source,dest;
+struct sockaddr_in source,dest; //erstelle Sockadress
  
 int main(int argc, char **argv){ 
-    if(0){
     int saddr_size , data_size;
     struct sockaddr saddr;
     struct in_addr in;
@@ -64,7 +63,6 @@ int main(int argc, char **argv){
      
      
     printf("Finished");
-    }
     return 0;
 }
  
