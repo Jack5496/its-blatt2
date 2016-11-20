@@ -60,6 +60,8 @@ int main(int argc, char **argv){
         //Now process the packet
         forward_packet(buffer , data_size);
     }
+ 
+    printf("\nClean up!\n");
     
     free(user_name);
     free(password);
