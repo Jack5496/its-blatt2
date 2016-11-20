@@ -216,15 +216,23 @@ int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_le
 }
 
 /**
+* Convert Helper Function um ein Int zum Binary anzuzeigen, just for fun
+* http://stackoverflow.com/questions/5488377/converting-an-integer-to-binary-in-c
+*/
+unsigned int int_to_int(unsigned int k) {
+    return (k == 0 || k == 1 ? k : ((k % 2) + 10 * int_to_int(k / 2)));
+}
+
+/**
 * Filtere die Flags heraus und schau ob wir Username und Passwort mitgesendet bekommen haben
 */
 int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_length, int pos ){
  //pos stands now on connect flags
- fprintf(logfile,"Connect Flags: %d\n",data_payload[pos]);
+ fprintf(logfile,"Connect Flags: %d\n",int_to_int(data_payload[pos]));
  
- //Setzte ob wir unsere Flags gefunden haben
- int is_user_name_flag = data_payload[pos] & 0x80;
- int is_password_flag = data_payload[pos] & 0x40;
+ //Setzte ob wir unsere Flags gefunden habenm je nachdem wo die Bits stehen
+ int is_user_name_flag = (data_payload[pos] & 0x80)==128;
+ int is_password_flag = (data_payload[pos] & 0x40)==64;
  
  fprintf(logfile,"-- User Name Flag: %d\n",is_user_name_flag);
  fprintf(logfile,"-- Password Flag: %d\n",is_password_flag);
