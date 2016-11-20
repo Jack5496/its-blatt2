@@ -188,6 +188,8 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  
  //pos stands now on MSB of next Flag whatever this is
  
+ pos = filter_client_identifier(data_payload, Size, remaining_length, pos);
+ 
  if(is_user_name_flag){
   pos = filter_user_name(data_payload, Size, remaining_length, pos);
  }
