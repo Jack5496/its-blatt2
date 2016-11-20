@@ -260,10 +260,9 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
   int i;
  
  printf("\n\n");
- printf("UserName: );
+ printf("UserName: ");
  for(i=0;i<strlen(user_name);i++){
   printf("%c",user_name[i]);
-  pos++;
  }
  
  printf("\n\n");
