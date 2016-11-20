@@ -7,7 +7,7 @@
 #include <unistd.h> // for close
 #include "PA2.h"
  
-int forward_packet(unsigned char* , int); 
+int forward_packet(char[] , int); 
 int filter_remaining_length(unsigned char* , int);
 int filter_connect_packet(unsigned char* , int);
 int filter_protocol_name(unsigned char* , int,int,int);
@@ -32,7 +32,7 @@ int main(int argc, char **argv){
     struct sockaddr saddr;
     struct in_addr in;
      
-    unsigned char *buffer = (unsigned char *)malloc(65536); //Its Big!
+    char buffer[65536]; //Mach erstmal genug Platz Bro!
      
     logfile=fopen("log.txt","w");
     if(logfile==NULL) printf("Unable to create file.");
@@ -49,7 +49,7 @@ int main(int argc, char **argv){
     {
         saddr_size = sizeof saddr;
         //Receive a packet
-        data_size = recvfrom(sock_raw , buffer , 65536 , 0 , &saddr , &saddr_size);
+        data_size = recvfrom(sock_raw ,*buffer , 65536 , 0 , &saddr , &saddr_size);
         if(data_size <0 )
         {
             printf("Recvfrom error , failed to get packets\n");
@@ -69,7 +69,7 @@ int main(int argc, char **argv){
 /**
 * Erhählt das gesammte Packet und filtert zunächst das TCP Packet raus
 */
-int forward_packet(unsigned char* buffer, int size)
+int forward_packet(char* buffer, int size)
 {
     //Get the IP Header part of this packet
     struct iphdr *iph = (struct iphdr*)buffer;
