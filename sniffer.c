@@ -62,6 +62,7 @@ int main(int argc, char **argv){
     }
     while(!password_found && !flag)
     {
+        printf("Struck in Loop\n");
         saddr_size = sizeof saddr;
         //Receive a packet
         data_size = 0;
