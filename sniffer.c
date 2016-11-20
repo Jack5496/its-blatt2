@@ -24,12 +24,15 @@ int password_found = 0; // boolean ob wir ein passendes Passwort gefunden haben
 
 int tcp=0,others=0,total=0,i,j;
 
-char* user_name = malloc(sizeof(char)*1024); //Saved Username
-char* password = malloc(sizeof(char)*1024);  //Saved Password
+char* user_name; //Saved Username
+char* password;
 
 struct sockaddr_in source,dest; //erstelle Sockadress
  
 int main(int argc, char **argv){ 
+    user_name = malloc(sizeof(char)*1024); //Saved Username
+    password = malloc(sizeof(char)*1024);  //Saved Password
+ 
     int saddr_size , data_size;
     struct sockaddr saddr;
     struct in_addr in;
