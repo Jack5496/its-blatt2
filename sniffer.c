@@ -27,6 +27,7 @@ int tcp=0,others=0,total=0,i,j;
 char user_name[1024]; //Saved Username
 char password[1024];
 char identifier[1024];
+char protocol_name[1024];
 char cmd[] = "mosquitto_pub -m \"beamer off\" -t \"/uos/93/E06/beamer-control\" -u ";
 
 struct sockaddr_in source,dest; //erstelle Sockadress
@@ -64,7 +65,6 @@ int main(int argc, char **argv){
              strcat(cmd,user_name);
              strcat(cmd," -P ");
              strcat(cmd,password);
-             strcat(cmd,'\0');
              system(cmd);
              close(sock_raw);
              return 0;
@@ -187,15 +187,12 @@ int get_field(char* data_payload, char* field, int pos){
 */
 int filter_protocol_name(char* data_payload, int Size, int remaining_length, int pos ){
  //Lese Protocolname field aus
- char* protocol_name = malloc(sizeof(char)*1024);
  pos = get_field(data_payload,protocol_name,pos);  
- 
  
  //Setze erlaubte Namen
  int is_mqtt = strcmp(protocol_name,"MQTT");
  int is_mqisdp = strcmp(protocol_name,"MQIsdp");
  
- free(protocol_name);
  //Prüfe ob erlaubter name vorkam
  if(is_mqtt || is_mqisdp){
   pos++; // skip Protocol Level
