@@ -242,3 +242,4 @@ int filter_password(unsigned char* data_payload, int Size, int remaining_length,
   
   fprintf(logfile,"\n");  
  return pos;
+}
