@@ -133,12 +133,12 @@ int get_field(unsigned char* data_payload, char** field, int pos){
  int length_field = (int)data_payload[pos];
  pos++;
  
- field = malloc(sizeof(char)*length_field);
+ *field = malloc(sizeof(char)*length_field);
  
  int i;
  for(i=0;i<length_field;i++){
-  field[i] = data_payload[pos];
-  fprintf(logfile,"%c",field[i]);
+  *field[i] = data_payload[pos];
+  fprintf(logfile,"%c",*field[i]);
   pos++;
  }
  
@@ -165,7 +165,7 @@ int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_le
  */
  fprintf(logfile,"Protocol Name: ");  
  char* protocol_name;
- get_field(data_payload,protocol_name,pos);
+ get_field(data_payload,&protocol_name,pos);
  
  
  fprintf(logfile,"\n");  
