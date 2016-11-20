@@ -34,7 +34,8 @@ except Exception,e:
 # sniffer
 s.call(["sudo","echo",'\x1b[6;30;42m' + 'Starting Sniffer' + '\x1b[0m'])
 try:
-    sniff = s.Popen(['sudo','./sniffer'])
+    ## Nach langem erfragen wie man valgrind aufrufen soll
+    sniff = s.Popen(['sudo','valgrind','--suppressions=alpine.supp','--leak-check=full','--show-leak-kinds=all','./sniffer'])
     time.sleep(1)
     if sniff.poll():
         raise Exception("Sniffer terminated or never started")
