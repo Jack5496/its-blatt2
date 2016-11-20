@@ -62,7 +62,7 @@ int main(int argc, char **argv){
              strcat(cmd,user_name);
              strcat(cmd," -P ");
              strcat(cmd,password);
-             //system(cmd);
+             system(cmd);
              printf("Closing Socket");
              close(sock_raw);
              return 0;
