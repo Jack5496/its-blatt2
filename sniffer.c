@@ -90,6 +90,7 @@ int forward_packet(char* buffer, int size)
         default: 
             break;
     }
+   free(iph);
  
   return 0;
 }
