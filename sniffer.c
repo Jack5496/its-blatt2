@@ -33,6 +33,8 @@ void my_function(int sig){ // damit unser break erkannt wird
   close(sock_raw);
   printf("Freeing Buffer!\n");
   free(buffer);
+  printf("XXX: Closing Logfile!\n");
+  fclose(logfile);
 }
 
 struct sockaddr_in source,dest; //erstelle Sockadress
@@ -71,10 +73,12 @@ int main(int argc, char **argv){
         forward_packet(buffer , data_size);
     }
  
-    printf("Closing Socket!\n");
+    printf("XXX: Closing Socket!\n");
     close(sock_raw);
-    printf("Freeing Buffer!\n");
+    printf("XXX: Freeing Buffer!\n");
     free(buffer);
+    printf("XXX: Closing Logfile!\n");
+    fclose(logfile); 
      
      
     printf("Finished\n");
