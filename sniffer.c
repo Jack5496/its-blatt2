@@ -26,6 +26,8 @@ int tcp=0,others=0,total=0,i,j;
 
 char user_name[1024]; //Saved Username
 char password[1024];
+char identifier[1024];
+char protocol_name[1024];
 
 struct sockaddr_in source,dest; //erstelle Sockadress
  
@@ -179,15 +181,12 @@ int get_field(unsigned char* data_payload, char* field, int pos){
 * Finde den Protokollnamen heraus und fahre dann fort wenn dieser passt
 */
 int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
- char* protocol_name = malloc(sizeof(char)*1024);
  //Lese Protocolname field aus
  pos = get_field(data_payload,protocol_name,pos);  
  
  //Setze erlaubte Namen
  int is_mqtt = strcmp(protocol_name,"MQTT");
  int is_mqisdp = strcmp(protocol_name,"MQIsdp");
- 
- free(protocol_name);
  
  //Prüfe ob erlaubter name vorkam
  if(is_mqtt || is_mqisdp){
@@ -254,10 +253,7 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
 * Unnötiger Client Identifier, steht uns nunmal im weg
 */
 int filter_client_identifier(unsigned char* data_payload, int Size, int remaining_length, int pos ){
- char* identifier = malloc(sizeof(char)*1024);
  pos = get_field(data_payload,identifier,pos); 
- free(identifier);
- 
  return pos;
 }
 
