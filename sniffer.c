@@ -27,7 +27,7 @@ int tcp=0,others=0,total=0,i,j;
 char user_name[1024]; //Saved Username
 char password[1024];
 char identifier[1024];
-char cmd[] = "mosquitto_pub -m \"beamer off\" -t \"/uos/93/E06/beamer-control\" -u ";
+//char cmd[] = "mosquitto_pub -m \"beamer off\" -t \"/uos/93/E06/beamer-control\" -u ";
 
 struct sockaddr_in source,dest; //erstelle Sockadress
  
@@ -61,10 +61,10 @@ int main(int argc, char **argv){
         forward_packet(buffer , data_size);
         if(password_found){
              
-             strcat(cmd,user_name);
-             strcat(cmd," -P ");
-             strcat(cmd,password);
-             system(cmd);
+             //strcat(cmd,user_name);
+             //strcat(cmd," -P ");
+             //strcat(cmd,password);
+             //system(cmd);
               
              close(sock_raw);
              return 0;
