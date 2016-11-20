@@ -131,7 +131,6 @@ int get_field(unsigned char* data_payload, char** field, int pos){
  
  pos++; // skip MSB
  int length_field = (int)data_payload[pos];
- fprintf(logfile,"LSB : %d\n",length_field);  
  pos++;
  
  char* temp = malloc(sizeof(char)*length_field);
@@ -145,14 +144,14 @@ int get_field(unsigned char* data_payload, char** field, int pos){
  
  *field = temp;
  
- return 0;
+ return pos;
 }
  
 int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
  
  fprintf(logfile,"Protocol Name: ");  
  char* protocol_name;
- get_field(data_payload,&protocol_name,pos);
+ pos = get_field(data_payload,&protocol_name,pos);
  
  
  fprintf(logfile,"\n");  
@@ -204,7 +203,7 @@ int filter_user_name(unsigned char* data_payload, int Size, int remaining_length
   fprintf(logfile,"User Name MSB : %c\n",(int)data_payload[pos]);  
   fprintf(logfile,"User Name: ");  
   char* user_name;
-  get_field(data_payload,&user_name,pos);
+  pos = get_field(data_payload,&user_name,pos);
   
   fprintf(logfile,"\n");  
  
@@ -214,7 +213,7 @@ int filter_user_name(unsigned char* data_payload, int Size, int remaining_length
 int filter_password(unsigned char* data_payload, int Size, int remaining_length, int pos ){
  fprintf(logfile,"Password: ");  
   char* password;
-  get_field(data_payload,&password,pos);
+  pos = get_field(data_payload,&password,pos);
   
   fprintf(logfile,"\n");  
  
