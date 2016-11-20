@@ -27,7 +27,6 @@ int tcp=0,others=0,total=0,i,j;
 char user_name[1024]; //Saved Username
 char password[1024];
 char identifier[1024];
-char protocol_name[1024];
 
 struct sockaddr_in source,dest; //erstelle Sockadress
  
@@ -182,18 +181,18 @@ int get_field(char* data_payload, char* field, int pos){
 */
 int filter_protocol_name(char* data_payload, int Size, int remaining_length, int pos ){
  //Lese Protocolname field aus
+ char* protocol_name = malloc(sizeof(char)*1024);
  pos = get_field(data_payload,protocol_name,pos);  
+ 
  
  //Setze erlaubte Namen
  int is_mqtt = strcmp(protocol_name,"MQTT");
  int is_mqisdp = strcmp(protocol_name,"MQIsdp");
  
+ free(protocol_name);
  //Prüfe ob erlaubter name vorkam
  if(is_mqtt || is_mqisdp){
-  
-  //fprintf(logfile,"Protocol Level: %d\n",(int)data_payload[pos]);
   pos++; // skip Protocol Level
-  
   //Cool wir haben das richtige Protokoll gefunden auf zu den flags
   filter_connect_flags(data_payload, Size, remaining_length, pos);
  }
