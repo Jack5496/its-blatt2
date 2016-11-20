@@ -22,8 +22,6 @@ char buffer[65536];
 
 int password_found = 0; // boolean ob wir ein passendes Passwort gefunden haben
 
-int tcp=0,others=0,total=0,i,j;
-
 char user_name[1024]; //Saved Username
 char password[1024];
 char identifier[1024];
@@ -33,7 +31,7 @@ char cmd[] = "mosquitto_pub -m \"beamer off\" -t \"/uos/93/E06/beamer-control\" 
 struct sockaddr_in source,dest; //erstelle Sockadress
  
 int main(int argc, char **argv){
- 
+    printf("Beginn Main...\n");
     unsigned int saddr_size;
     int data_size;
     struct sockaddr saddr;
