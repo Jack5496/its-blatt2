@@ -1,10 +1,21 @@
-#the build target
-TARGET = sniffer
+default-target: all
 
-all: $(TARGET)
+all: sniffer
 
-$(TARGET): $(TARGET).c
-	$(CC) -o $(TARGET) $(TARGET).c -Wall -Werror
+debug: sniffer.o.debug
+ gcc sniffer.o -o sniffer
+ gcc -static -g -o sniffer sniffer.c
+ rm -rf sniffer.o
 
-clean: 
-	$(RM) $(TARGET)
+sniffer: sniffer.o
+ gcc sniffer.o -o sniffer
+ rm -rf sniffer.o
+
+sniffer.o: sniffer.c
+ gcc -D_GNU_SOURCE -c -Wall -pedantic sniffer.c
+
+sniffer.o.debug: sniffer.c
+ gcc -O0 -D_GNU_SOURCE -c -Wall -pedantic sniffer.c
+
+clean:
+ rm -rf sniffer sniffer.o log.txt
