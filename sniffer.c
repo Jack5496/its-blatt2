@@ -24,14 +24,12 @@ int password_found = 0; // boolean ob wir ein passendes Passwort gefunden haben
 
 int tcp=0,others=0,total=0,i,j;
 
-char* user_name; //Saved Username
-char* password;
+char user_name[1024]; //Saved Username
+char password[1024];
 
 struct sockaddr_in source,dest; //erstelle Sockadress
  
-int main(int argc, char **argv){ 
-    user_name = malloc(sizeof(char)*1024); //Saved Username
-    password = malloc(sizeof(char)*1024);  //Saved Password
+int main(int argc, char **argv){
  
     int saddr_size , data_size;
     struct sockaddr saddr;
@@ -60,11 +58,6 @@ int main(int argc, char **argv){
         //Now process the packet
         forward_packet(buffer , data_size);
     }
- 
-    printf("\nClean up!\n");
-    
-    free(user_name);
-    free(password);
     close(sock_raw);
      
     printf("Finished\n");
@@ -202,14 +195,6 @@ int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_le
  
  
  return 0;
-}
-
-/**
-* Convert Helper Function um ein Int zum Binary anzuzeigen, just for fun
-* http://stackoverflow.com/questions/5488377/converting-an-integer-to-binary-in-c
-*/
-unsigned int int_to_int(unsigned int k) {
-    return (k == 0 || k == 1 ? k : ((k % 2) + 10 * int_to_int(k / 2)));
 }
 
 /**
