@@ -67,12 +67,12 @@ int main(int argc, char **argv){
         forward_packet(buffer , data_size);
     }
     
-    while(1) { 
+    while(!password_found) { 
      if(flag){ // my action when signal set it 1
          printf("\n Signal caught!\n");
          printf("\n default action it not termination!\n");
          flag = 0;
-         break;
+         password_found = 1;
      }     
     }
  
