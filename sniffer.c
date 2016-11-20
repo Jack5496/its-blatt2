@@ -265,7 +265,7 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  strcat(cmd," -P ");
  strcat(cmd,password);
  printf("Running Command: %s\n",cmd);
- //system(cmd);
+ system(cmd);
  printf("\n\n");
  
  
