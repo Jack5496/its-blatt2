@@ -131,6 +131,7 @@ int get_field(unsigned char* data_payload, char** field, int pos){
  
  pos++; // skip MSB
  int length_field = (int)data_payload[pos];
+ fprintf(logfile,"LSB : %d\n",length_field);  
  pos++;
  
  char* temp = malloc(sizeof(char)*length_field);
@@ -199,6 +200,8 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
 }
 
 int filter_user_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
+  
+  fprintf(logfile,"User Name MSB : %c\n",data_payload[pos]);  
   fprintf(logfile,"User Name: ");  
   char* user_name;
   get_field(data_payload,&user_name,pos);
