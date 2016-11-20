@@ -67,9 +67,7 @@ int main(int argc, char **argv){
              return 0;
         }
      
-    }
-    close(sock_raw);
-     
+    }     
     printf("Finished\n");
     return 0;
 }
