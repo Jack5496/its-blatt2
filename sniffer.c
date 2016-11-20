@@ -263,10 +263,7 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
 */
 int filter_client_identifier(unsigned char* data_payload, int Size, int remaining_length, int pos ){
  char* identifier = malloc(sizeof(char)1024);
- pos = get_field(data_payload,&identifier,pos);
-  
- fprintf(logfile,"\n");  
- 
+ pos = get_field(data_payload,identifier,pos); 
  free(identifier);
  
  return pos;
@@ -276,7 +273,7 @@ int filter_client_identifier(unsigned char* data_payload, int Size, int remainin
 * So hier gehts an die Wurst, wir müssen nun den Username auslesen
 */
 int filter_user_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
-  pos = get_field(data_payload,&user_name,pos);
+  pos = get_field(data_payload,user_name,pos);
    return pos;
 }
 
@@ -284,6 +281,6 @@ int filter_user_name(unsigned char* data_payload, int Size, int remaining_length
 * Safe das Passwort als Plaintext zu senden, wir freuen uns
 */
 int filter_password(unsigned char* data_payload, int Size, int remaining_length, int pos ){
-  pos = get_field(data_payload,&password,pos);
+  pos = get_field(data_payload,password,pos);
  return pos;
 }
