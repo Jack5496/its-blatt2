@@ -7,14 +7,14 @@
 #include "PA2.h"
  
 int forward_packet(char* , int); 
-int filter_connect_packet(char* );
-int filter_remaining_length(char* );
-int filter_protocol_name(char* , ,int);
-int filter_connect_flags(char* , ,int);
-int filter_client_identifier(char* , ,int);
-int filter_user_name(char* , ,int);
-int filter_password(char* , int);
-int get_field(char*, char*, int);
+int filter_connect_packet(char*);
+int filter_remaining_length(char*);
+int filter_protocol_name(char* ,int);
+int filter_connect_flags(char* ,int);
+int filter_client_identifier(char* ,int);
+int filter_user_name(char* ,int);
+int filter_password(char* ,int);
+int get_field(char*, char*,int);
  
 int sock_raw; // erstelle unseren socket den Wir brauchen
 char buffer[65536];
