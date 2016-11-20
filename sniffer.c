@@ -12,6 +12,7 @@ int filter_remaining_length(unsigned char* , int);
 int filter_connect_packet(unsigned char* , int);
 int filter_protocol_name(unsigned char* , int,int,int);
 int filter_connect_flags(unsigned char* , int,int,int);
+int filter_client_identifier(unsigned char* , int,int,int);
 int filter_user_name(unsigned char* , int,int,int);
 int filter_password(unsigned char* , int,int,int);
 int get_field(unsigned char*, char**, int);
@@ -180,11 +181,9 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  
  fprintf(logfile,"-- User Name Flag: %d\n",is_user_name_flag);
  fprintf(logfile,"-- Password Flag: %d\n",is_password_flag);
+ pos++; // forward to keep alive
  
- pos++;
- fprintf(logfile,"Keep Alive MSP : %d\n",data_payload[pos]);  
  pos++; //skip keep alive MSB
- fprintf(logfile,"Keep Alive LSB : %d\n",data_payload[pos]);  
  pos++; //skip keep alive LSB
  
  //pos stands now on MSB of next Flag whatever this is
@@ -198,6 +197,20 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  
  
  return 0;
+}
+
+int filter_client_identifier(unsigned char* data_payload, int Size, int remaining_length, int pos ){
+  
+  fprintf(logfile,"Client Identifier MSB : %d\n",data_payload[pos]);  
+  fprintf(logfile,"Identifier: ");  
+  char* identifier;
+  pos = get_field(data_payload,&identifier,pos);
+  
+  fprintf(logfile,"\n");  
+ 
+ free(identifier);
+ 
+ return pos;
 }
 
 int filter_user_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
