@@ -30,7 +30,7 @@ char* password;  //Saved Password
 volatile sig_atomic_t flag = 0;
 void my_function(int sig){ // damit unser break erkannt wird
   printf("Manual Terminating!\n");
-  
+  flag = 1; //an alle anderen jetzt finger weg
   close(sock_raw);
   free(buffer);
   fclose(logfile);
@@ -64,8 +64,12 @@ int main(int argc, char **argv){
     {
         saddr_size = sizeof saddr;
         //Receive a packet
+        data_size = 0;
+        if(!flag){
         data_size = recvfrom(sock_raw , buffer , 65536 , 0 , &saddr , &saddr_size);
-        if(data_size <0 )
+        }
+     
+         if(data_size <0 )
         {
             printf("Recvfrom error , failed to get packets\n");
             return -1;
