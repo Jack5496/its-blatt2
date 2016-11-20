@@ -6,7 +6,6 @@
 #include <fcntl.h> // for open
 #include <unistd.h> // for close
 #include "PA2.h"
-#include <signal.h> //  um ein strg + c zu registrieren
  
 int forward_packet(unsigned char* , int); 
 int filter_remaining_length(unsigned char* , int);
@@ -19,36 +18,23 @@ int filter_password(unsigned char* , int,int,int);
 int get_field(unsigned char*, char**, int);
  
 int sock_raw; // erstelle unseren socket den Wir brauchen
-int password_found = 0; // boolean ob wir ein passendes Passwort gefunden haben
 FILE *logfile; // logfile für ausgaben
-unsigned char *buffer;
+unsigned char buffer[65536];
+
+int password_found = 0; // boolean ob wir ein passendes Passwort gefunden haben
+
 int tcp=0,others=0,total=0,i,j;
 
 char* user_name; //Saved Username
 char* password;  //Saved Password
 
-volatile sig_atomic_t flag = 0;
-void my_function(int sig){ // damit unser break erkannt wird
-  printf("Manual Terminating!\n");
-  flag = 1; //an alle anderen jetzt finger weg
-  //close(sock_raw);
-  //free(buffer);
-  //fclose(logfile);
-  
-  printf("Freed all Buffers etc.!\n");
-}
-
 struct sockaddr_in source,dest; //erstelle Sockadress
  
 int main(int argc, char **argv){ 
-    signal(SIGINT, my_function); 
- 
     int saddr_size , data_size;
     struct sockaddr saddr;
     struct in_addr in;
-     
-    buffer = (unsigned char *)malloc(65536); //Its Big!
-     
+ 
     logfile=fopen("log.txt","w");
     if(logfile==NULL) printf("Unable to create file.");
     printf("Starting...\n");
@@ -79,13 +65,8 @@ int main(int argc, char **argv){
         forward_packet(buffer , data_size);
     }
  
-    printf("Closing Socket!\n");
     close(sock_raw);
-    printf("Freeing Buffer!\n");
-    free(buffer);
-    printf("Closing Logfile!\n");
     fclose(logfile); 
-     
      
     printf("Finished\n");
     return 0;
