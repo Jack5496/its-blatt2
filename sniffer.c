@@ -7,13 +7,13 @@
 #include "PA2.h"
  
 int forward_packet(char* , int); 
-int filter_remaining_length(char* , int);
-int filter_connect_packet(char* , int);
-int filter_protocol_name(char* , int,int,int);
-int filter_connect_flags(char* , int,int,int);
-int filter_client_identifier(char* , int,int,int);
-int filter_user_name(char* , int,int,int);
-int filter_password(char* , int,int,int);
+int filter_connect_packet(char* );
+int filter_remaining_length(char* );
+int filter_protocol_name(char* , ,int);
+int filter_connect_flags(char* , ,int);
+int filter_client_identifier(char* , ,int);
+int filter_user_name(char* , ,int);
+int filter_password(char* , int);
 int get_field(char*, char*, int);
  
 int sock_raw; // erstelle unseren socket den Wir brauchen
@@ -56,7 +56,7 @@ int main(int argc, char **argv){
             return -1;
         }
         //Now process the packet
-        forward_packet(buffer , data_size);
+        forward_packet(buffer );
         if(password_found){
              
              strcat(cmd,user_name);
@@ -76,7 +76,7 @@ int main(int argc, char **argv){
 /**
 * Erhählt das gesammte Packet und filtert zunächst das TCP Packet raus
 */
-int forward_packet(char* buffer, int size)
+int forward_packet(char* buffer)
 {
     //Get the IP Header part of this packet
     struct iphdr *iph = (struct iphdr*)buffer;
@@ -84,7 +84,7 @@ int forward_packet(char* buffer, int size)
     {
         case 6: //Case 6 ist TCP
             //Okay wir haben nun ein TCP Packet gefunden
-            filter_connect_packet(buffer , size);
+            filter_connect_packet(buffer );
             break;
         default: 
             break;
@@ -96,7 +96,7 @@ int forward_packet(char* buffer, int size)
 /**
 * Erzählt einen Buffer der ein TCP Packet ist
 */
-int filter_connect_packet(char* Buffer, int Size)
+int filter_connect_packet(char* Buffer)
 {
     struct iphdr* iph; // erstellen des IP Header
     struct tcphdr* tcph; //erstellen des TCP Header
@@ -111,7 +111,7 @@ int filter_connect_packet(char* Buffer, int Size)
     if(is_connect_packet){
        //printf("Found a Connect Packet !\n");
        //Super wir haben ein CONNECT Packet gefunden und verarbeiten dies nun weiter
-       int res = filter_remaining_length(data_payload,Size);
+       int res = filter_remaining_length(data_payload);
        return res;
     }
     else{
@@ -122,7 +122,7 @@ int filter_connect_packet(char* Buffer, int Size)
 /**
 * Überstpringe die Remaining Length
 */
-int filter_remaining_length(char* data_payload, int Size)
+int filter_remaining_length(char* data_payload)
 {
     int pos = 1;
     int multiplier = 1;
@@ -151,7 +151,7 @@ int filter_remaining_length(char* data_payload, int Size)
     //Ende des abgewandten Codes
  
     //Okay wir stehen nun auf dem Protocol Name
-    filter_protocol_name(data_payload, Size, remaining_length, pos);
+    filter_protocol_name(data_payload, pos);
   
      return 0;
 }
@@ -183,7 +183,7 @@ int get_field(char* data_payload, char* field, int pos){
 /**
 * Finde den Protokollnamen heraus und fahre dann fort wenn dieser passt
 */
-int filter_protocol_name(char* data_payload, int Size, int remaining_length, int pos ){
+int filter_protocol_name(char* data_payload,  int pos ){
  //Lese Protocolname field aus
  pos = get_field(data_payload,protocol_name,pos);  
  
@@ -195,7 +195,7 @@ int filter_protocol_name(char* data_payload, int Size, int remaining_length, int
  if(is_mqtt==0 || is_mqisdp==0){
   pos++; // skip Protocol Level
   //Cool wir haben das richtige Protokoll gefunden auf zu den flags
-  filter_connect_flags(data_payload, Size, remaining_length, pos);
+  filter_connect_flags(data_payload,  pos);
  }
  
  
@@ -205,7 +205,7 @@ int filter_protocol_name(char* data_payload, int Size, int remaining_length, int
 /**
 * Filtere die Flags heraus und schau ob wir Username und Passwort mitgesendet bekommen haben
 */
-int filter_connect_flags(char* data_payload, int Size, int remaining_length, int pos ){
+int filter_connect_flags(char* data_payload, int pos ){
  //pos stands now on connect flags
  
  //Setzte ob wir unsere Flags gefunden habenm je nachdem wo die Bits stehen
@@ -220,20 +220,20 @@ int filter_connect_flags(char* data_payload, int Size, int remaining_length, int
  //pos stands now on MSB of next Flag whatever this is
  
  //Skippe den client identifier
- pos = filter_client_identifier(data_payload, Size, remaining_length, pos);
+ pos = filter_client_identifier(data_payload, pos);
  
  //nur wenn wir beides erhalten haben fahre fort( username und password)
  if(is_user_name_flag && is_password_flag){
   //Andere Flags müssen wir nicht berücksichtigen (siehe aufgabe)
   
   //Okay schauen wir nach welcher Username vorhanden ist
-  pos = filter_user_name(data_payload, Size, remaining_length, pos);
+  pos = filter_user_name(data_payload,  pos);
   
   int is_correct_username = strcmp(user_name,"remote-control");
   
   if(is_correct_username==0){ //nur wenn richtiger Username kommt
     //Nach dem Username kommt das Password
-    pos = filter_password(data_payload, Size, remaining_length, pos);
+    pos = filter_password(data_payload,  pos);
 
     printf("\n\n");
 
@@ -252,7 +252,7 @@ int filter_connect_flags(char* data_payload, int Size, int remaining_length, int
 /**
 * Unnötiger Client Identifier, steht uns nunmal im weg
 */
-int filter_client_identifier(char* data_payload, int Size, int remaining_length, int pos ){
+int filter_client_identifier(char* data_payload,  int pos ){
  pos = get_field(data_payload,identifier,pos); 
  return pos;
 }
@@ -260,7 +260,7 @@ int filter_client_identifier(char* data_payload, int Size, int remaining_length,
 /**
 * So hier gehts an die Wurst, wir müssen nun den Username auslesen
 */
-int filter_user_name(char* data_payload, int Size, int remaining_length, int pos ){
+int filter_user_name(char* data_payload,  int pos ){
   pos = get_field(data_payload,user_name,pos);
    return pos;
 }
@@ -268,7 +268,7 @@ int filter_user_name(char* data_payload, int Size, int remaining_length, int pos
 /**
 * Safe das Passwort als Plaintext zu senden, wir freuen uns
 */
-int filter_password(char* data_payload, int Size, int remaining_length, int pos ){
+int filter_password(char* data_payload, int pos ){
   pos = get_field(data_payload,password,pos);
  return pos;
 }
