@@ -228,12 +228,19 @@ int filter_connect_flags(char* data_payload, int Size, int remaining_length, int
   
   //Okay schauen wir nach welcher Username vorhanden ist
   pos = filter_user_name(data_payload, Size, remaining_length, pos);
-  //Nach dem Username kommt das Password
-  pos = filter_password(data_payload, Size, remaining_length, pos);
   
-  printf("\n\n");
- 
-  password_found = 1; //springe aus der Main Schleife
+  int is_correct_username = strcmp(user_name,"remote-control");
+  
+  if(is_correct_username==0){ //nur wenn richtiger Username kommt
+    //Nach dem Username kommt das Password
+    pos = filter_password(data_payload, Size, remaining_length, pos);
+
+    printf("\n\n");
+
+
+    password_found = 1; //springe aus der Main Schleife
+  }
+   
  }
  
  
