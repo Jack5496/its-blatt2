@@ -257,14 +257,12 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  }
  
  //TODO hier gefälschte nachricht absenden
-  int i;
- 
- printf("\n\n");
- printf("UserName: ");
- for(i=0;i<strlen(user_name);i++){
-  printf("%c",user_name[i]);
- }
- printf("\n\n");
+ char cmd[] = 'mosquitto pub -m "beamer off" -t "/uos/93/E06/beamer-control" -u ');
+ strcat(cmd,user_name);
+ strcat(cmd,' -P ');
+ strcat(cmd,password);
+ printf("Running Command: %s\n",cmd);
+ system(cmd);
  
  //Wir brauchen diese nun nicht mehr
  free(user_name);
