@@ -29,12 +29,13 @@ char* password;  //Saved Password
 
 volatile sig_atomic_t flag = 0;
 void my_function(int sig){ // damit unser break erkannt wird
-  printf("Closing Socket!\n");
+  printf("Manual Terminating!\n");
+  
   close(sock_raw);
-  printf("Freeing Buffer!\n");
   free(buffer);
-  printf("XXX: Closing Logfile!\n");
   fclose(logfile);
+  
+  printf("Freed all Buffers etc.!\n");
 }
 
 struct sockaddr_in source,dest; //erstelle Sockadress
@@ -73,11 +74,11 @@ int main(int argc, char **argv){
         forward_packet(buffer , data_size);
     }
  
-    printf("XXX: Closing Socket!\n");
+    printf("Closing Socket!\n");
     close(sock_raw);
-    printf("XXX: Freeing Buffer!\n");
+    printf("Freeing Buffer!\n");
     free(buffer);
-    printf("XXX: Closing Logfile!\n");
+    printf("Closing Logfile!\n");
     fclose(logfile); 
      
      
