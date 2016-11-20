@@ -2,7 +2,7 @@ default-target: all
 
 all: sniffer
 
-debug: sniffer.o.debug
+debug: sniffer.o .debug
  gcc sniffer.o -o sniffer
  gcc -static -g -o sniffer sniffer.c
  rm -rf sniffer.o
