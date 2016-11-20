@@ -21,6 +21,7 @@ int get_field(unsigned char*, char**, int);
 int sock_raw; // erstelle unseren socket den Wir brauchen
 int password_found = 0; // boolean ob wir ein passendes Passwort gefunden haben
 FILE *logfile; // logfile für ausgaben
+unsigned char *buffer;
 int tcp=0,others=0,total=0,i,j;
 
 char* user_name; //Saved Username
@@ -43,7 +44,7 @@ int main(int argc, char **argv){
     struct sockaddr saddr;
     struct in_addr in;
      
-    unsigned char *buffer = (unsigned char *)malloc(65536); //Its Big!
+    *buffer = (unsigned char *)malloc(65536); //Its Big!
      
     logfile=fopen("log.txt","w");
     if(logfile==NULL) printf("Unable to create file.");
