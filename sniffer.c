@@ -102,8 +102,9 @@ int filter_connect_packet(char* Buffer, int Size)
     struct iphdr* iph; // erstellen des IP Header
     struct tcphdr* tcph; //erstellen des TCP Header
  
+    char* data_payload;
     //Wir holen uns das Gesammte Payload Packer (inlc. Fixed Header, Variable Header, etc.)
-    char* data_payload = get_tcp_payload(Buffer,&iph ,&tcph ); //Aufruf der Helper Funktion
+    data_payload = get_tcp_payload(Buffer,&iph ,&tcph ); //Aufruf der Helper Funktion
  
     char mqtt_packet_type = data_payload[0] & 0xF0; //MQTT Packet Typ ist von Bit 7-4 definiert --> Filtern dieser Bits
     int is_connect_packet = mqtt_packet_type==16; // Wenn Bit 4 eine 1 ist ist es ein CONNECT Packet --> 0001000 = 16
@@ -111,7 +112,8 @@ int filter_connect_packet(char* Buffer, int Size)
     if(is_connect_packet){
        //printf("Found a Connect Packet !\n");
        //Super wir haben ein CONNECT Packet gefunden und verarbeiten dies nun weiter
-       return filter_remaining_length(data_payload,Size);
+       int res = filter_remaining_length(data_payload,Size);
+       return res;
     }
     else{
        return 0;
