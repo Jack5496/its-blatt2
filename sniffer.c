@@ -43,7 +43,7 @@ int main(int argc, char **argv){
         printf("Socket Error\n");
         return 1;
     }
-    while(!password_found)
+    while(password_found==0)
     {
         saddr_size = sizeof saddr;
         //Receive a packet
@@ -57,6 +57,12 @@ int main(int argc, char **argv){
         }
         //Now process the packet
         forward_packet(buffer , data_size);
+        printf("Pass Found: %d\n",password_found);
+        if(password_found){
+             close(sock_raw);
+             return 0;
+        }
+     
     }
     close(sock_raw);
      
