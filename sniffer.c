@@ -2,7 +2,7 @@
 #include<stdlib.h>    //malloc
 #include<string.h>    //für strings
 #include<sys/socket.h>
-#include<netinet.h>
+#include<netinet/in.h>
 #include <zconf.h> // for open
 #include "PA2.h"
  
