@@ -146,23 +146,7 @@ int get_field(unsigned char* data_payload, char** field, int pos){
 }
  
 int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
- /**
- pos++; // skip MSB
- int length_protocol_name = (int)data_payload[pos];
- pos++;
  
- char protocol_name[length_protocol_name];
- 
- fprintf(logfile,"Protocol Name: ");  
- int i;
- for(i=0;i<length_protocol_name;i++){
-  
-  protocol_name[i] = data_payload[pos];
-  fprintf(logfile,"%c",protocol_name[i]);
-  pos++;
- }
- 
- */
  fprintf(logfile,"Protocol Name: ");  
  char* protocol_name;
  get_field(data_payload,&protocol_name,pos);
@@ -172,6 +156,8 @@ int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_le
  
  int is_mqtt = strcmp(protocol_name,"MQTT");
  int is_mqisdp = strcmp(protocol_name,"MQIsdp");
+ 
+ free(protocol_name);
  
  if(is_mqtt || is_mqisdp){
   pos++; // skip Protocol Level
