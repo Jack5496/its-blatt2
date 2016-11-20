@@ -3,6 +3,7 @@
 #include<string.h>    //für strings
 #include<sys/socket.h>
 #include<netinet/in.h>
+#include <signal.h> //Damit ich Signale abfangen kann
 #include <unistd.h> // für strg c anfangen
 #include <zconf.h> // for open
 #include "PA2.h"
