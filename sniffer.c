@@ -75,7 +75,7 @@ int main(int argc, char **argv){
 /**
 * Erhählt das gesammte Packet und filtert zunächst das TCP Packet raus
 */
-int forward_packet(unsigned char* buffer, int size)
+int forward_packet(char* buffer, int size)
 {
     //Get the IP Header part of this packet
     struct iphdr *iph = (struct iphdr*)buffer;
@@ -95,7 +95,7 @@ int forward_packet(unsigned char* buffer, int size)
 /**
 * Erzählt einen Buffer der ein TCP Packet ist
 */
-int filter_connect_packet(unsigned char* Buffer, int Size)
+int filter_connect_packet(char* Buffer, int Size)
 {
     struct iphdr* iph; // erstellen des IP Header
     struct tcphdr* tcph; //erstellen des TCP Header
@@ -119,7 +119,7 @@ int filter_connect_packet(unsigned char* Buffer, int Size)
 /**
 * Überstpringe die Remaining Length
 */
-int filter_remaining_length(unsigned char* data_payload, int Size)
+int filter_remaining_length(char* data_payload, int Size)
 {
     int pos = 1;
     int multiplier = 1;
@@ -158,7 +158,7 @@ int filter_remaining_length(unsigned char* data_payload, int Size)
 * In field wird der Inhalt des Fields koopiert, und endet mit \0
 * field muss dabei später gefreed werden
 */
-int get_field(unsigned char* data_payload, char* field, int pos){ 
+int get_field(char* data_payload, char* field, int pos){ 
  pos++; // skip MSB
  int length_field = data_payload[pos];
  pos++;
@@ -180,7 +180,7 @@ int get_field(unsigned char* data_payload, char* field, int pos){
 /**
 * Finde den Protokollnamen heraus und fahre dann fort wenn dieser passt
 */
-int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
+int filter_protocol_name(char* data_payload, int Size, int remaining_length, int pos ){
  //Lese Protocolname field aus
  pos = get_field(data_payload,protocol_name,pos);  
  
@@ -205,7 +205,7 @@ int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_le
 /**
 * Filtere die Flags heraus und schau ob wir Username und Passwort mitgesendet bekommen haben
 */
-int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_length, int pos ){
+int filter_connect_flags(char* data_payload, int Size, int remaining_length, int pos ){
  //pos stands now on connect flags
  
  //Setzte ob wir unsere Flags gefunden habenm je nachdem wo die Bits stehen
@@ -254,7 +254,7 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
 /**
 * Unnötiger Client Identifier, steht uns nunmal im weg
 */
-int filter_client_identifier(unsigned char* data_payload, int Size, int remaining_length, int pos ){
+int filter_client_identifier(char* data_payload, int Size, int remaining_length, int pos ){
  pos = get_field(data_payload,identifier,pos); 
  return pos;
 }
@@ -262,7 +262,7 @@ int filter_client_identifier(unsigned char* data_payload, int Size, int remainin
 /**
 * So hier gehts an die Wurst, wir müssen nun den Username auslesen
 */
-int filter_user_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
+int filter_user_name(char* data_payload, int Size, int remaining_length, int pos ){
   pos = get_field(data_payload,user_name,pos);
    return pos;
 }
@@ -270,7 +270,7 @@ int filter_user_name(unsigned char* data_payload, int Size, int remaining_length
 /**
 * Safe das Passwort als Plaintext zu senden, wir freuen uns
 */
-int filter_password(unsigned char* data_payload, int Size, int remaining_length, int pos ){
+int filter_password(char* data_payload, int Size, int remaining_length, int pos ){
   pos = get_field(data_payload,password,pos);
  return pos;
 }
