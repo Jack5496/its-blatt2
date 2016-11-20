@@ -6,7 +6,7 @@
 #include <zconf.h> // for open
 #include "PA2.h"
  
-int forward_packet(char* , int); 
+int forward_packet(char* ); 
 int filter_connect_packet(char*);
 int filter_remaining_length(char*);
 int filter_protocol_name(char* ,int);
