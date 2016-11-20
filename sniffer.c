@@ -31,9 +31,9 @@ volatile sig_atomic_t flag = 0;
 void my_function(int sig){ // damit unser break erkannt wird
   printf("Manual Terminating!\n");
   flag = 1; //an alle anderen jetzt finger weg
-  close(sock_raw);
-  free(buffer);
-  fclose(logfile);
+  //close(sock_raw);
+  //free(buffer);
+  //fclose(logfile);
   
   printf("Freed all Buffers etc.!\n");
 }
