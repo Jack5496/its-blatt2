@@ -173,9 +173,9 @@ int get_field(unsigned char* data_payload, char* field, int pos){
 * Finde den Protokollnamen heraus und fahre dann fort wenn dieser passt
 */
 int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
- char* protocol_name;
+ char* protocol_name = malloc(sizeof(char)*1024);
  //Lese Protocolname field aus
- pos = get_field(data_payload,&protocol_name,pos);  
+ pos = get_field(data_payload,protocol_name,pos);  
  
  //Setze erlaubte Namen
  int is_mqtt = strcmp(protocol_name,"MQTT");
