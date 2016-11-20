@@ -24,8 +24,8 @@ int password_found = 0; // boolean ob wir ein passendes Passwort gefunden haben
 
 int tcp=0,others=0,total=0,i,j;
 
-char* user_name = malloc(sizeof(char)1024); //Saved Username
-char* password = malloc(sizeof(char)1024);  //Saved Password
+char* user_name = malloc(sizeof(char)*1024); //Saved Username
+char* password = malloc(sizeof(char)*1024);  //Saved Password
 
 struct sockaddr_in source,dest; //erstelle Sockadress
  
@@ -162,7 +162,7 @@ int get_field(unsigned char* data_payload, char* field, int pos){
   pos++;
  }
  //setze ende des Strings
- temp[length_field] = '\0';
+ field[length_field] = '\0';
  
  //Gebe neue position zurück
  return pos;
@@ -176,8 +176,6 @@ int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_le
  char* protocol_name;
  //Lese Protocolname field aus
  pos = get_field(data_payload,&protocol_name,pos);  
- 
- fprintf(logfile,"\n");  
  
  //Setze erlaubte Namen
  int is_mqtt = strcmp(protocol_name,"MQTT");
@@ -262,7 +260,7 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
 * Unnötiger Client Identifier, steht uns nunmal im weg
 */
 int filter_client_identifier(unsigned char* data_payload, int Size, int remaining_length, int pos ){
- char* identifier = malloc(sizeof(char)1024);
+ char* identifier = malloc(sizeof(char)*1024);
  pos = get_field(data_payload,identifier,pos); 
  free(identifier);
  
