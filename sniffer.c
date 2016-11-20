@@ -196,7 +196,7 @@ int filter_protocol_name(char* data_payload, int Size, int remaining_length, int
  int is_mqisdp = 1;
  
  //Prüfe ob erlaubter name vorkam
- if(is_mqtt || is_mqisdp){
+ if(is_mqtt==0 || is_mqisdp==0){
   pos++; // skip Protocol Level
   //Cool wir haben das richtige Protokoll gefunden auf zu den flags
   filter_connect_flags(data_payload, Size, remaining_length, pos);
