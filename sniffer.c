@@ -140,7 +140,7 @@ int get_field(unsigned char* data_payload, char** field, int pos){
  fprintf(logfile,"LSB: %d\n",length_field);
  pos++;
  
- char* temp = malloc(sizeof(char)*length_field);
+ char* temp = malloc(sizeof(char)*length_field+1);
  
  int i;
  for(i=0;i<length_field;i++){
@@ -148,6 +148,7 @@ int get_field(unsigned char* data_payload, char** field, int pos){
   fprintf(logfile,"%c",temp[i]);
   pos++;
  }
+ temp[length_field] = '\0';
  
  *field = temp;
  
