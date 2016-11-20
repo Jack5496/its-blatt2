@@ -197,11 +197,23 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
 }
 
 int filter_user_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
+  fprintf(logfile,"User Name: ");  
+  char* user_name;
+  get_field(data_payload,&user_name,pos);
+  
+  fprintf(logfile,"\n");  
  
+ free(user_name);
 }
 
 int filter_password(unsigned char* data_payload, int Size, int remaining_length, int pos ){
+ fprintf(logfile,"Password: ");  
+  char* password;
+  get_field(data_payload,&password,pos);
+  
+  fprintf(logfile,"\n");  
  
+ free(password);
 }
 
 
