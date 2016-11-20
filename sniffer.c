@@ -189,9 +189,11 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  if(is_user_name_flag){
   filter_user_name(data_payload, Size, remaining_length, pos);
  }
+ /**
  if(is_password_flag){
   filter_password(data_payload, Size, remaining_length, pos);
  }
+ */
  
  return 0;
 }
