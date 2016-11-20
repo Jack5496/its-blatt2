@@ -15,7 +15,7 @@ int filter_connect_flags(unsigned char* , int,int,int);
 int filter_client_identifier(unsigned char* , int,int,int);
 int filter_user_name(unsigned char* , int,int,int);
 int filter_password(unsigned char* , int,int,int);
-int get_field(unsigned char*, char**, int);
+int get_field(unsigned char*, char*, int);
  
 int sock_raw; // erstelle unseren socket den Wir brauchen
 unsigned char buffer[65536];
