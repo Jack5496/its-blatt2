@@ -33,7 +33,6 @@ int main(int argc, char **argv){
     struct in_addr in;
      
     unsigned char *buffer = (unsigned char *)malloc(65536); //Its Big!
-    memset(&buffer,'\0',65536);
      
     logfile=fopen("log.txt","w");
     if(logfile==NULL) printf("Unable to create file.");
