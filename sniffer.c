@@ -186,13 +186,12 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  //pos stands now on MSB of next Flag whatever this is
  
  if(is_user_name_flag){
-  filter_user_name(data_payload, Size, remaining_length, pos);
+  pos = filter_user_name(data_payload, Size, remaining_length, pos);
  }
- /**
  if(is_password_flag){
-  filter_password(data_payload, Size, remaining_length, pos);
+  pos = filter_password(data_payload, Size, remaining_length, pos);
  }
- */
+ 
  
  return 0;
 }
@@ -207,6 +206,8 @@ int filter_user_name(unsigned char* data_payload, int Size, int remaining_length
   fprintf(logfile,"\n");  
  
  free(user_name);
+ 
+ return pos;
 }
 
 int filter_password(unsigned char* data_payload, int Size, int remaining_length, int pos ){
@@ -217,6 +218,8 @@ int filter_password(unsigned char* data_payload, int Size, int remaining_length,
   fprintf(logfile,"\n");  
  
  free(password);
+ 
+ return pos;
 }
 
 
