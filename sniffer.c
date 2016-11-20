@@ -60,6 +60,9 @@ int main(int argc, char **argv){
         ProcessPacket(buffer , data_size);
     }
     close(sock_raw);
+    free(buffer);
+     
+     
     printf("Finished");
     }
     return 0;
