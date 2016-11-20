@@ -60,7 +60,9 @@ int main(int argc, char **argv){
         //Now process the packet
         forward_packet(buffer , data_size);
     }
- 
+    
+    free(user_name);
+    free(password);
     close(sock_raw);
      
     printf("Finished\n");
@@ -250,10 +252,6 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  system(cmd);
  printf("\n\n");
  password_found = 1; //beende die Main Schleife
- 
- //Wir brauchen diese nun nicht mehr
- free(user_name);
- free(password);
  
  return 0;
 }
