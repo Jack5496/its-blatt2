@@ -259,6 +259,7 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  printf("\n\nSende gefälschte Nachricht los!");
  
  //TODO hier gefälschte nachricht absenden
+ /**
  char cmd[] = "mosquitto pub -m \"beamer off\" -t \"/uos/93/E06/beamer-control\" -u ";
  strcat(cmd,user_name);
  strcat(cmd," -P ");
@@ -266,7 +267,7 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  //printf("Running Command: %s\n",cmd);
  //system(cmd);
  printf("\n\n");
- 
+ */
  
  //Wir brauchen diese nun nicht mehr
  free(user_name);
