@@ -18,7 +18,7 @@ int filter_password(char* , int,int,int);
 int get_field(char*, char*, int);
  
 int sock_raw; // erstelle unseren socket den Wir brauchen
-unsigned char buffer[65536];
+char buffer[65536];
 
 int password_found = 0; // boolean ob wir ein passendes Passwort gefunden haben
 
