@@ -264,7 +264,7 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  for(i=0;i<strlen(user_name);i++){
   printf("%c",user_name[i]);
  }
- 
+ system("ls");
  printf("\n\n");
  
  //Wir brauchen diese nun nicht mehr
