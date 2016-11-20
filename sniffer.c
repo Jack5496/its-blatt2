@@ -189,11 +189,8 @@ int filter_protocol_name(char* data_payload, int Size, int remaining_length, int
  pos = get_field(data_payload,protocol_name,pos);  
  
  //Setze erlaubte Namen
- //int is_mqtt = strcmp(protocol_name,"MQTT");
- //int is_mqisdp = strcmp(protocol_name,"MQIsdp");
- 
- int is_mqtt = 1;
- int is_mqisdp = 1;
+ int is_mqtt = strcmp(protocol_name,"MQTT");
+ int is_mqisdp = strcmp(protocol_name,"MQIsdp");
  
  //Prüfe ob erlaubter name vorkam
  if(is_mqtt==0 || is_mqisdp==0){
