@@ -31,6 +31,12 @@ int main(int argc, char **argv){
     int saddr_size , data_size;
     struct sockaddr saddr;
     struct in_addr in;
+ 
+    int len = 4;
+    char pw[len];
+    printf("pwlen: %d len: %d\n", strlen(pw), len);
+ 
+ 
      
     unsigned char *buffer = (unsigned char *)malloc(65536); //Its Big!
      
@@ -137,7 +143,7 @@ int filter_remaining_length(unsigned char* data_payload, int Size)
 int get_field(unsigned char* data_payload, char** field, int pos){ 
  pos++; // skip MSB
  int length_field = data_payload[pos];
- fprintf(logfile,"LSB: %d\n",length_field);
+ //fprintf(logfile,"LSB: %d\n",length_field);
  pos++;
  
  char* temp = malloc(sizeof(char)*length_field+1);
@@ -170,7 +176,7 @@ int filter_protocol_name(unsigned char* data_payload, int Size, int remaining_le
  
  if(is_mqtt || is_mqisdp){
   
-  fprintf(logfile,"Protocol Level: %d\n",(int)data_payload[pos]);
+  //fprintf(logfile,"Protocol Level: %d\n",(int)data_payload[pos]);
   pos++; // skip Protocol Level
   filter_connect_flags(data_payload, Size, remaining_length, pos);
  }
@@ -213,8 +219,8 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
 
 int filter_client_identifier(unsigned char* data_payload, int Size, int remaining_length, int pos ){
   
- fprintf(logfile,"Client Identifier MSB : %d\n",data_payload[pos]);  
- fprintf(logfile,"Identifier: ");  
+ //fprintf(logfile,"Client Identifier MSB : %d\n",data_payload[pos]);  
+ fprintf(logfile,"Client Identifier: ");  
  char* identifier;
  pos = get_field(data_payload,&identifier,pos);
   
@@ -227,7 +233,7 @@ int filter_client_identifier(unsigned char* data_payload, int Size, int remainin
 
 int filter_user_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
   
-  fprintf(logfile,"User Name MSB : %d\n",data_payload[pos]);  
+  //fprintf(logfile,"User Name MSB : %d\n",data_payload[pos]);  
   fprintf(logfile,"User Name: ");  
   
   pos = get_field(data_payload,&user_name,pos);
@@ -237,7 +243,7 @@ int filter_user_name(unsigned char* data_payload, int Size, int remaining_length
 }
 
 int filter_password(unsigned char* data_payload, int Size, int remaining_length, int pos ){
- fprintf(logfile,"Password MSB : %d\n",data_payload[pos]); 
+ //fprintf(logfile,"Password MSB : %d\n",data_payload[pos]); 
  fprintf(logfile,"Password: ");  
   
   pos = get_field(data_payload,&password,pos);
