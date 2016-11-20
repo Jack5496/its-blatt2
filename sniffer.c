@@ -33,9 +33,9 @@ struct sockaddr_in source,dest; //erstelle Sockadress
  
 int main(int argc, char **argv){
  
-    int saddr_size , data_size;
+    unsigned int saddr_size;
+    int data_size;
     struct sockaddr saddr;
-    struct in_addr in;
  
     printf("Starting...\n");
     //Create a raw socket that shall sniff
