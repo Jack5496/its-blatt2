@@ -46,7 +46,7 @@ int main(int argc, char **argv){
         printf("Socket Error\n");
         return 1;
     }
-    while(!password_found && !flag)
+    while(!password_found)
     {
         printf("Struck in Loop\n");
         saddr_size = sizeof saddr;
