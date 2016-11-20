@@ -28,7 +28,10 @@ char* password;  //Saved Password
 
 volatile sig_atomic_t flag = 0;
 void my_function(int sig){ // damit unser break erkannt wird
-  flag = 1; // setzen wir unsere Flag
+  printf("Closing Socket!\n");
+  close(sock_raw);
+  printf("Freeing Buffer!\n");
+  free(buffer);
 }
 
 struct sockaddr_in source,dest; //erstelle Sockadress
