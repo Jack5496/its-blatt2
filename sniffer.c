@@ -2,9 +2,8 @@
 #include<stdlib.h>    //malloc
 #include<string.h>    //für strings
 #include<sys/socket.h>
-#include<arpa/inet.h>
-#include <fcntl.h> // for open
-
+#include<netinet.h>
+#include <zconf.h> // for open
 #include "PA2.h"
  
 int forward_packet(char* , int); 
