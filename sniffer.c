@@ -128,7 +128,8 @@ int filter_remaining_length(unsigned char* data_payload, int Size)
 
 int get_field(unsigned char* data_payload, char** field, int pos){ 
  pos++; // skip MSB
- int length_field = (int)data_payload[pos];
+ int length_field = data_payload[pos];
+ fprintf(logfile,"LSB: %d\n",length_field);
  pos++;
  
  char* temp = malloc(sizeof(char)*length_field);
@@ -200,7 +201,7 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
 
 int filter_user_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
   
-  fprintf(logfile,"User Name MSB : %d\n",(int)data_payload[pos]);  
+  fprintf(logfile,"User Name MSB : %d\n",data_payload[pos]);  
   fprintf(logfile,"User Name: ");  
   char* user_name;
   pos = get_field(data_payload,&user_name,pos);
@@ -213,7 +214,7 @@ int filter_user_name(unsigned char* data_payload, int Size, int remaining_length
 }
 
 int filter_password(unsigned char* data_payload, int Size, int remaining_length, int pos ){
- fprintf(logfile,"Password MSB : %d\n",(int)data_payload[pos]); 
+ fprintf(logfile,"Password MSB : %d\n",data_payload[pos]); 
  fprintf(logfile,"Password: ");  
   char* password;
   pos = get_field(data_payload,&password,pos);
