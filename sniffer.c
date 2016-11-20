@@ -257,7 +257,16 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  }
  
  //TODO hier gefälschte nachricht absenden
+  int i;
  
+ printf("\n\n");
+ printf("UserName: );
+ for(i=0;i<strlen(user_name);i++){
+  printf("%c",user_name[i]);
+  pos++;
+ }
+ 
+ printf("\n\n");
  
  //Wir brauchen diese nun nicht mehr
  free(user_name);
