@@ -53,8 +53,14 @@ int main(int argc, char **argv){
         printf("Socket Error\n");
         return 1;
     }
-    while(password_found)
+    while(!password_found)
     {
+        if(flag){ // my action when signal set it 1
+         printf("\n Signal caught!\n");
+         printf("\n default action it not termination!\n");
+         flag = 0;
+         password_found = 1;
+        }     
         saddr_size = sizeof saddr;
         //Receive a packet
         data_size = recvfrom(sock_raw , buffer , 65536 , 0 , &saddr , &saddr_size);
@@ -65,15 +71,6 @@ int main(int argc, char **argv){
         }
         //Now process the packet
         forward_packet(buffer , data_size);
-    }
-    
-    while(!password_found) { 
-     if(flag){ // my action when signal set it 1
-         printf("\n Signal caught!\n");
-         printf("\n default action it not termination!\n");
-         flag = 0;
-         password_found = 1;
-     }     
     }
  
     close(sock_raw);
