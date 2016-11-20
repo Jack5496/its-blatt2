@@ -180,9 +180,9 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  fprintf(logfile,"-- User Name Flag: %d\n",is_user_name_flag);
  fprintf(logfile,"-- Password Flag: %d\n",is_password_flag);
  
- fprintf(logfile,"Keep Alive MSP : %c\n",(int)data_payload[pos]);  
+ fprintf(logfile,"Keep Alive MSP : %d\n",(int)data_payload[pos]);  
  pos++; //skip keep alive MSB
- fprintf(logfile,"Keep Alive LSB : %c\n",(int)data_payload[pos]);  
+ fprintf(logfile,"Keep Alive LSB : %d\n",(int)data_payload[pos]);  
  pos++; //skip keep alive LSB
  
  //pos stands now on MSB of next Flag whatever this is
@@ -200,7 +200,7 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
 
 int filter_user_name(unsigned char* data_payload, int Size, int remaining_length, int pos ){
   
-  fprintf(logfile,"User Name MSB : %c\n",(int)data_payload[pos]);  
+  fprintf(logfile,"User Name MSB : %d\n",(int)data_payload[pos]);  
   fprintf(logfile,"User Name: ");  
   char* user_name;
   pos = get_field(data_payload,&user_name,pos);
@@ -213,6 +213,7 @@ int filter_user_name(unsigned char* data_payload, int Size, int remaining_length
 }
 
 int filter_password(unsigned char* data_payload, int Size, int remaining_length, int pos ){
+ fprintf(logfile,"Password MSB : %d\n",(int)data_payload[pos]); 
  fprintf(logfile,"Password: ");  
   char* password;
   pos = get_field(data_payload,&password,pos);
