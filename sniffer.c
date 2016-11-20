@@ -60,7 +60,7 @@ int main(int argc, char **argv){
         printf("Socket Error\n");
         return 1;
     }
-    while(!password_found)
+    while(!password_found && !flag)
     {
         saddr_size = sizeof saddr;
         //Receive a packet
