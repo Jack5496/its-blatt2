@@ -21,9 +21,14 @@ int sock_raw;
 int password_found = 0;
 FILE *logfile;
 int tcp=0,others=0,total=0,i,j;
+
+char* user_name;
+char* password;
+
 struct sockaddr_in source,dest;
  
-int main(int argc, char **argv){
+int main(int argc, char **argv){ 
+    if(0){
     int saddr_size , data_size;
     struct sockaddr saddr;
     struct in_addr in;
@@ -56,6 +61,7 @@ int main(int argc, char **argv){
     }
     close(sock_raw);
     printf("Finished");
+    }
     return 0;
 }
  
@@ -176,8 +182,8 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
  //pos stands now on connect flags
  fprintf(logfile,"Connect Flags: %d\n",data_payload[pos]);
  
- int is_user_name_flag = data_payload[pos] && 0x80;
- int is_password_flag = data_payload[pos] && 0x40;
+ int is_user_name_flag = data_payload[pos] & 0x80;
+ int is_password_flag = data_payload[pos] & 0x40;
  
  fprintf(logfile,"-- User Name Flag: %d\n",is_user_name_flag);
  fprintf(logfile,"-- Password Flag: %d\n",is_password_flag);
@@ -197,18 +203,20 @@ int filter_connect_flags(unsigned char* data_payload, int Size, int remaining_le
   pos = filter_password(data_payload, Size, remaining_length, pos);
  }
  
+ free(user_name);
+ free(password);
  
  return 0;
 }
 
 int filter_client_identifier(unsigned char* data_payload, int Size, int remaining_length, int pos ){
   
-  fprintf(logfile,"Client Identifier MSB : %d\n",data_payload[pos]);  
-  fprintf(logfile,"Identifier: ");  
-  char* identifier;
-  pos = get_field(data_payload,&identifier,pos);
+ fprintf(logfile,"Client Identifier MSB : %d\n",data_payload[pos]);  
+ fprintf(logfile,"Identifier: ");  
+ char* identifier;
+ pos = get_field(data_payload,&identifier,pos);
   
-  fprintf(logfile,"\n");  
+ fprintf(logfile,"\n");  
  
  free(identifier);
  
@@ -219,36 +227,19 @@ int filter_user_name(unsigned char* data_payload, int Size, int remaining_length
   
   fprintf(logfile,"User Name MSB : %d\n",data_payload[pos]);  
   fprintf(logfile,"User Name: ");  
-  char* user_name;
+  
   pos = get_field(data_payload,&user_name,pos);
   
   fprintf(logfile,"\n");  
- 
- free(user_name);
- 
  return pos;
 }
 
 int filter_password(unsigned char* data_payload, int Size, int remaining_length, int pos ){
  fprintf(logfile,"Password MSB : %d\n",data_payload[pos]); 
  fprintf(logfile,"Password: ");  
-  char* password;
+  
   pos = get_field(data_payload,&password,pos);
   
   fprintf(logfile,"\n");  
- 
- free(password);
- 
  return pos;
 }
-
-
-
-
-
-
-
-
-
-
-
