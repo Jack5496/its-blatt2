@@ -40,9 +40,8 @@ void last_wish(int s){
            {
                close(sock_raw); //schließe diesen
                printf("Socket geschlossen\n");
-               return 1;
            }
-           exit(1); 
+           exit(1); //schließe
 }
  
 int main(int argc, char **argv){
